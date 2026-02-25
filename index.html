@@ -13,12 +13,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', sans-serif;
             background: #0a0e1a;
@@ -28,7 +23,6 @@
             overflow: hidden;
             min-width: 1366px;
         }
-
         .topnav {
             background: linear-gradient(135deg, #1e3a8a 0%, #7c3aed 100%);
             padding: 0;
@@ -37,12 +31,9 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.5);
             height: 50px;
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: 0; left: 0; right: 0;
             z-index: 1000;
         }
-
         .nav-brand {
             padding: 0 20px;
             display: flex;
@@ -51,12 +42,7 @@
             font-weight: 700;
             border-right: 1px solid rgba(255,255,255,0.1);
         }
-
-        .nav-tabs {
-            display: flex;
-            flex: 1;
-        }
-
+        .nav-tabs { display: flex; flex: 1; }
         .nav-tab {
             padding: 0 20px;
             display: flex;
@@ -69,16 +55,11 @@
             transition: all 0.3s;
             background: rgba(0,0,0,0);
         }
-
-        .nav-tab:hover {
-            background: rgba(255,255,255,0.1);
-        }
-
+        .nav-tab:hover { background: rgba(255,255,255,0.1); }
         .nav-tab.active {
             background: rgba(255,255,255,0.15);
             border-bottom: 3px solid #10b981;
         }
-
         .nav-stats {
             display: flex;
             gap: 25px;
@@ -86,38 +67,11 @@
             align-items: center;
             font-size: 12px;
         }
-
-        .stat-label {
-            font-size: 9px;
-            opacity: 0.7;
-            text-transform: uppercase;
-        }
-
-        .stat-value {
-            font-size: 15px;
-            font-weight: 700;
-            margin-top: 2px;
-        }
-
-        .container {
-            position: fixed;
-            top: 50px;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            overflow: hidden;
-        }
-
-        .tab-content {
-            display: none;
-            height: 100%;
-            overflow-y: auto;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
+        .stat-label { font-size: 9px; opacity: 0.7; text-transform: uppercase; }
+        .stat-value { font-size: 15px; font-weight: 700; margin-top: 2px; }
+        .container { position: fixed; top: 50px; left: 0; right: 0; bottom: 0; overflow: hidden; }
+        .tab-content { display: none; height: 100%; overflow-y: auto; }
+        .tab-content.active { display: block; }
         .dashboard {
             display: grid;
             grid-template-columns: 240px 1fr 280px;
@@ -125,26 +79,14 @@
             padding: 12px;
             height: 100%;
         }
-
-        .left-panel, .right-panel {
-            overflow-y: auto;
-            overflow-x: hidden;
-        }
-
-        .center-panel {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            overflow: hidden;
-        }
-
+        .left-panel, .right-panel { overflow-y: auto; overflow-x: hidden; }
+        .center-panel { display: flex; flex-direction: column; gap: 12px; overflow: hidden; }
         .card {
             background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
             border-radius: 10px;
             padding: 12px;
             border: 1px solid rgba(124, 58, 237, 0.2);
         }
-
         .card-title {
             font-size: 12px;
             font-weight: 700;
@@ -153,63 +95,18 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            font-size: 11px;
-            margin-bottom: 8px;
-        }
-
-        .info-label {
-            color: #94a3b8;
-        }
-
-        .info-value {
-            font-weight: 700;
-        }
-
-        .metric {
-            margin-bottom: 12px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .metric:last-child {
-            margin-bottom: 0;
-            padding-bottom: 0;
-            border: none;
-        }
-
-        .metric-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 6px;
-        }
-
-        .metric-label {
-            font-size: 10px;
-            color: #94a3b8;
-            text-transform: uppercase;
-        }
-
-        .metric-value {
-            font-size: 22px;
-            font-weight: 900;
-        }
-
+        .info-row { display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 8px; }
+        .info-label { color: #94a3b8; }
+        .info-value { font-weight: 700; }
+        .metric { margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .metric:last-child { margin-bottom: 0; padding-bottom: 0; border: none; }
+        .metric-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+        .metric-label { font-size: 10px; color: #94a3b8; text-transform: uppercase; }
+        .metric-value { font-size: 22px; font-weight: 900; }
         .metric-value.good { color: #10b981; text-shadow: 0 0 8px rgba(16,185,129,0.4); }
         .metric-value.warning { color: #f59e0b; text-shadow: 0 0 8px rgba(245,158,11,0.4); }
         .metric-value.danger { color: #ef4444; text-shadow: 0 0 8px rgba(239,68,68,0.4); }
-
-        .progress-bar {
-            height: 6px;
-            background: rgba(0,0,0,0.5);
-            border-radius: 3px;
-            overflow: hidden;
-        }
-
+        .progress-bar { height: 6px; background: rgba(0,0,0,0.5); border-radius: 3px; overflow: hidden; }
         .progress-fill {
             height: 100%;
             border-radius: 3px;
@@ -217,17 +114,8 @@
             background: linear-gradient(90deg, #10b981, #34d399);
             box-shadow: 0 0 8px rgba(16,185,129,0.4);
         }
-
-        .progress-fill.warning {
-            background: linear-gradient(90deg, #f59e0b, #fbbf24);
-            box-shadow: 0 0 8px rgba(245,158,11,0.4);
-        }
-
-        .progress-fill.danger {
-            background: linear-gradient(90deg, #ef4444, #f87171);
-            box-shadow: 0 0 8px rgba(239,68,68,0.4);
-        }
-
+        .progress-fill.warning { background: linear-gradient(90deg, #f59e0b, #fbbf24); box-shadow: 0 0 8px rgba(245,158,11,0.4); }
+        .progress-fill.danger { background: linear-gradient(90deg, #ef4444, #f87171); box-shadow: 0 0 8px rgba(239,68,68,0.4); }
         .video-section {
             flex: 1;
             min-height: 0;
@@ -238,7 +126,6 @@
             display: flex;
             flex-direction: column;
         }
-
         .video-wrapper {
             position: relative;
             width: 100%;
@@ -248,27 +135,11 @@
             overflow: hidden;
             min-height: 0;
         }
-
-        #video {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            transform: scaleX(-1);
-        }
-
-        #canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            transform: scaleX(-1);
-        }
-
+        #video { width: 100%; height: 100%; object-fit: contain; transform: scaleX(-1); }
+        #canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform: scaleX(-1); }
         .video-overlay {
             position: absolute;
-            top: 12px;
-            left: 12px;
+            top: 12px; left: 12px;
             background: rgba(0,0,0,0.9);
             padding: 10px 14px;
             border-radius: 6px;
@@ -276,26 +147,14 @@
             font-size: 13px;
             font-weight: 700;
         }
-
         .video-overlay.warning { border-left-color: #f59e0b; }
-        .video-overlay.danger { 
-            border-left-color: #ef4444; 
-            animation: shake 0.5s infinite; 
-        }
-
+        .video-overlay.danger { border-left-color: #ef4444; animation: shake 0.5s infinite; }
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-2px); }
             75% { transform: translateX(2px); }
         }
-
-        .controls {
-            display: flex;
-            gap: 8px;
-            margin-top: 10px;
-            flex-wrap: wrap;
-        }
-
+        .controls { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
         .btn {
             padding: 8px 14px;
             border: none;
@@ -306,58 +165,20 @@
             transition: all 0.2s;
             text-transform: uppercase;
         }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #7c3aed, #6d28d9);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 15px rgba(124,58,237,0.4);
-        }
-
-        .btn-danger {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-            color: white;
-        }
-
-        .btn-success {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-        }
-
-        .btn-secondary {
-            background: #475569;
-            color: white;
-        }
-
-        .charts-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            height: 160px;
-        }
-
+        .btn-primary { background: linear-gradient(135deg, #7c3aed, #6d28d9); color: white; }
+        .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 15px rgba(124,58,237,0.4); }
+        .btn-danger { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
+        .btn-success { background: linear-gradient(135deg, #10b981, #059669); color: white; }
+        .btn-secondary { background: #475569; color: white; }
+        .charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; height: 160px; }
         .chart-card {
             background: #1e293b;
             border-radius: 10px;
             padding: 12px;
             border: 1px solid rgba(124, 58, 237, 0.2);
         }
-
-        .chart-title {
-            font-size: 11px;
-            font-weight: 700;
-            color: #a78bfa;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-        }
-
-        .chart-container {
-            height: calc(100% - 24px);
-        }
-
+        .chart-title { font-size: 11px; font-weight: 700; color: #a78bfa; margin-bottom: 8px; text-transform: uppercase; }
+        .chart-container { height: calc(100% - 24px); }
         .alerts-summary {
             background: #1e293b;
             border-radius: 10px;
@@ -365,7 +186,6 @@
             border: 1px solid rgba(124, 58, 237, 0.2);
             margin-bottom: 12px;
         }
-
         .alert-stat {
             display: flex;
             justify-content: space-between;
@@ -375,21 +195,9 @@
             background: rgba(0,0,0,0.3);
             border-radius: 6px;
         }
-
-        .alert-stat:last-child {
-            margin-bottom: 0;
-        }
-
-        .alert-stat-label {
-            font-size: 11px;
-            color: #94a3b8;
-        }
-
-        .alert-stat-value {
-            font-size: 18px;
-            font-weight: 900;
-        }
-
+        .alert-stat:last-child { margin-bottom: 0; }
+        .alert-stat-label { font-size: 11px; color: #94a3b8; }
+        .alert-stat-value { font-size: 18px; font-weight: 900; }
         .login-screen {
             display: flex;
             align-items: center;
@@ -397,7 +205,6 @@
             height: 100vh;
             background: linear-gradient(135deg, #0a0e1a 0%, #1a1f3a 100%);
         }
-
         .login-card {
             background: #1e293b;
             border-radius: 20px;
@@ -406,32 +213,10 @@
             border: 1px solid rgba(124, 58, 237, 0.3);
             box-shadow: 0 20px 60px rgba(0,0,0,0.6);
         }
-
-        .login-logo {
-            text-align: center;
-            font-size: 48px;
-            margin-bottom: 10px;
-        }
-
-        .login-title {
-            text-align: center;
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 30px;
-        }
-
-        .input-group {
-            margin-bottom: 20px;
-        }
-
-        .input-group label {
-            display: block;
-            font-size: 12px;
-            color: #94a3b8;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-        }
-
+        .login-logo { text-align: center; font-size: 48px; margin-bottom: 10px; }
+        .login-title { text-align: center; font-size: 24px; font-weight: 700; margin-bottom: 30px; }
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; font-size: 12px; color: #94a3b8; margin-bottom: 8px; text-transform: uppercase; }
         .input-group input, .input-group select {
             width: 100%;
             background: #0f172a;
@@ -441,24 +226,104 @@
             color: white;
             font-size: 14px;
         }
+        .input-group input:focus, .input-group select:focus { outline: none; border-color: #7c3aed; }
 
-        .input-group input:focus, .input-group select:focus {
-            outline: none;
-            border-color: #7c3aed;
-        }
-
-        #map {
-            height: 100%;
-            border-radius: 8px;
-        }
-
-        .analytics-grid {
+        /* GPS TAB */
+        .gps-layout {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            margin-bottom: 15px;
+            grid-template-columns: 300px 1fr;
+            gap: 12px;
+            padding: 12px;
+            height: 100%;
+        }
+        .gps-sidebar { overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+        .gps-map-area {
+            background: #1e293b;
+            border-radius: 10px;
+            padding: 12px;
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            display: flex;
+            flex-direction: column;
+        }
+        #map { flex: 1; border-radius: 8px; min-height: 0; }
+
+        /* GPS Status Badge */
+        .gps-status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .gps-status-badge.acquiring { background: rgba(245,158,11,0.2); color: #f59e0b; border: 1px solid #f59e0b; }
+        .gps-status-badge.live { background: rgba(16,185,129,0.2); color: #10b981; border: 1px solid #10b981; }
+        .gps-status-badge.error { background: rgba(239,68,68,0.2); color: #ef4444; border: 1px solid #ef4444; }
+
+        /* Coordinate display */
+        .coord-box {
+            background: rgba(0,0,0,0.4);
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 8px;
+            border: 1px solid rgba(124, 58, 237, 0.15);
+        }
+        .coord-label { font-size: 9px; color: #64748b; text-transform: uppercase; margin-bottom: 4px; }
+        .coord-value { font-size: 15px; font-weight: 700; color: #a78bfa; font-family: monospace; }
+
+        /* Leaflet popup custom style */
+        .leaflet-popup-content-wrapper {
+            background: #1e293b !important;
+            color: white !important;
+            border: 1px solid rgba(124, 58, 237, 0.5) !important;
+            border-radius: 10px !important;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.6) !important;
+        }
+        .leaflet-popup-tip { background: #1e293b !important; }
+        .leaflet-popup-content { margin: 0 !important; padding: 0 !important; }
+        .popup-inner { padding: 14px; min-width: 220px; }
+        .popup-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(124,58,237,0.3);
+        }
+        .popup-icon { font-size: 28px; }
+        .popup-title { font-size: 15px; font-weight: 800; color: #a78bfa; }
+        .popup-subtitle { font-size: 10px; color: #64748b; margin-top: 2px; }
+        .popup-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            margin-bottom: 7px;
+            padding: 5px 8px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 5px;
+        }
+        .popup-row-label { color: #94a3b8; }
+        .popup-row-value { font-weight: 700; color: white; font-family: monospace; }
+        .popup-status {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+        .popup-status.active { background: rgba(16,185,129,0.2); color: #10b981; border: 1px solid #10b981; }
+        .popup-accuracy {
+            margin-top: 10px;
+            font-size: 10px;
+            color: #64748b;
+            text-align: center;
+            padding-top: 8px;
+            border-top: 1px solid rgba(255,255,255,0.05);
         }
 
+        .analytics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 15px; }
         .stat-card {
             background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
             border-radius: 12px;
@@ -466,25 +331,9 @@
             border: 1px solid rgba(124, 58, 237, 0.2);
             text-align: center;
         }
-
-        .stat-card-value {
-            font-size: 36px;
-            font-weight: 900;
-            margin-bottom: 8px;
-        }
-
-        .stat-card-label {
-            font-size: 12px;
-            color: #94a3b8;
-            text-transform: uppercase;
-        }
-
-        .settings-container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
+        .stat-card-value { font-size: 36px; font-weight: 900; margin-bottom: 8px; }
+        .stat-card-label { font-size: 12px; color: #94a3b8; text-transform: uppercase; }
+        .settings-container { max-width: 900px; margin: 0 auto; padding: 20px; }
         .setting-group {
             background: #1e293b;
             border-radius: 12px;
@@ -492,14 +341,7 @@
             margin-bottom: 15px;
             border: 1px solid rgba(124, 58, 237, 0.2);
         }
-
-        .setting-group h3 {
-            font-size: 14px;
-            color: #a78bfa;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-        }
-
+        .setting-group h3 { font-size: 14px; color: #a78bfa; margin-bottom: 15px; text-transform: uppercase; }
         .setting-item {
             display: flex;
             justify-content: space-between;
@@ -508,105 +350,22 @@
             padding-bottom: 15px;
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
-
-        .setting-item:last-child {
-            margin-bottom: 0;
-            padding-bottom: 0;
-            border: none;
-        }
-
-        .setting-label {
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .setting-description {
-            font-size: 11px;
-            color: #94a3b8;
-            margin-top: 4px;
-        }
-
-        input[type="range"] {
-            width: 200px;
-            height: 6px;
-            border-radius: 3px;
-            background: #475569;
-            outline: none;
-        }
-
-        input[type="range"]::-webkit-slider-thumb {
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            background: #7c3aed;
-            cursor: pointer;
-        }
-
-        select {
-            background: #475569;
-            border: 1px solid rgba(124, 58, 237, 0.3);
-            border-radius: 6px;
-            padding: 8px 12px;
-            color: white;
-            font-size: 12px;
-        }
-
-        ::-webkit-scrollbar {
-            width: 5px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: rgba(0,0,0,0.3);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #7c3aed;
-            border-radius: 2px;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.6; }
-        }
-
-        .blinking {
-            animation: pulse 1s infinite;
-        }
-
-        .toggle-switch {
-            position: relative;
-            width: 50px;
-            height: 24px;
-            background: #475569;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .toggle-switch.active {
-            background: #10b981;
-        }
-
-        .toggle-slider {
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            width: 20px;
-            height: 20px;
-            background: white;
-            border-radius: 50%;
-            transition: left 0.3s;
-        }
-
-        .toggle-switch.active .toggle-slider {
-            left: 28px;
-        }
-
-        .session-list {
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
+        .setting-item:last-child { margin-bottom: 0; padding-bottom: 0; border: none; }
+        .setting-label { font-size: 13px; font-weight: 600; }
+        .setting-description { font-size: 11px; color: #94a3b8; margin-top: 4px; }
+        input[type="range"] { width: 200px; height: 6px; border-radius: 3px; background: #475569; outline: none; }
+        input[type="range"]::-webkit-slider-thumb { width: 16px; height: 16px; border-radius: 50%; background: #7c3aed; cursor: pointer; }
+        select { background: #475569; border: 1px solid rgba(124, 58, 237, 0.3); border-radius: 6px; padding: 8px 12px; color: white; font-size: 12px; }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); }
+        ::-webkit-scrollbar-thumb { background: #7c3aed; border-radius: 2px; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+        .blinking { animation: pulse 1s infinite; }
+        .toggle-switch { position: relative; width: 50px; height: 24px; background: #475569; border-radius: 12px; cursor: pointer; transition: background 0.3s; }
+        .toggle-switch.active { background: #10b981; }
+        .toggle-slider { position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: white; border-radius: 50%; transition: left 0.3s; }
+        .toggle-switch.active .toggle-slider { left: 28px; }
+        .session-list { max-height: 300px; overflow-y: auto; }
         .session-item {
             background: rgba(0,0,0,0.3);
             padding: 12px;
@@ -614,911 +373,1008 @@
             margin-bottom: 8px;
             border-left: 3px solid #7c3aed;
         }
+        .session-item.active { border-left-color: #10b981; background: rgba(16, 185, 129, 0.1); }
 
-        .session-item.active {
-            border-left-color: #10b981;
-            background: rgba(16, 185, 129, 0.1);
+        /* Pulsing dot for live GPS */
+        @keyframes ripple {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(3); opacity: 0; }
+        }
+        .live-dot {
+            width: 14px; height: 14px;
+            background: #10b981;
+            border-radius: 50%;
+            position: relative;
+            display: inline-block;
+        }
+        .live-dot::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: #10b981;
+            border-radius: 50%;
+            animation: ripple 1.5s infinite;
         }
     </style>
 </head>
 <body>
-    <!-- Login Screen -->
-    <div id="loginScreen" class="login-screen">
-        <div class="login-card">
-            <div class="login-logo">🚗</div>
-            <div class="login-title">Driver Monitoring System</div>
-            <div class="input-group">
-                <label>Driver ID</label>
-                <input type="text" id="loginDriverId" placeholder="Enter your driver ID" value="DRV-2024-001">
+
+<!-- Login Screen -->
+<div id="loginScreen" class="login-screen">
+    <div class="login-card">
+        <div class="login-logo">🚌</div>
+        <div class="login-title">Driver Monitoring System</div>
+        <div class="input-group">
+            <label>Driver ID</label>
+            <input type="text" id="loginDriverId" placeholder="Enter your driver ID" value="DRV-2024-0187">
+        </div>
+        <div class="input-group">
+            <label>Bus ID</label>
+            <select id="loginBusId">
+                <option value="BUS-17B-001">BUS-17B-001 — Route 17B</option>
+                <option value="BUS-12A-003">BUS-12A-003 — Route 12A</option>
+                <option value="BUS-08C-005">BUS-08C-005 — Route 08C</option>
+                <option value="BUS-22D-007">BUS-22D-007 — Route 22D</option>
+                <option value="BUS-15B-002">BUS-15B-002 — Route 15B</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <label>Password</label>
+            <input type="password" id="loginPassword" placeholder="Enter password" value="password123">
+        </div>
+        <button class="btn btn-primary" style="width: 100%; padding: 12px;" onclick="login()">🔑 Login</button>
+        <div style="text-align: center; margin-top: 20px; font-size: 11px; color: #64748b;">
+            Demo: DRV-2024-0187 / password123
+        </div>
+    </div>
+</div>
+
+<!-- Main Application -->
+<div id="mainApp" style="display: none;">
+    <div class="topnav">
+        <div class="nav-brand">🚌 DRIVER MONITORING PRO</div>
+        <div class="nav-tabs">
+            <div class="nav-tab active" onclick="switchTab('dashboard', this)">
+                <span>📊</span><span>Dashboard</span>
             </div>
-            <div class="input-group">
-                <label>Password</label>
-                <input type="password" id="loginPassword" placeholder="Enter password" value="password123">
+            <div class="nav-tab" onclick="switchTab('gps', this)">
+                <span>🗺️</span><span>GPS Tracking</span>
             </div>
-            <button class="btn btn-primary" style="width: 100%; padding: 12px;" onclick="login()">🔑 Login</button>
-            <div style="text-align: center; margin-top: 20px; font-size: 11px; color: #64748b;">
-                Demo credentials: DRV-2024-001 / password123
+            <div class="nav-tab" onclick="switchTab('analytics', this)">
+                <span>📈</span><span>Analytics</span>
             </div>
+            <div class="nav-tab" onclick="switchTab('settings', this)">
+                <span>⚙️</span><span>Settings</span>
+            </div>
+        </div>
+        <div class="nav-stats">
+            <div>
+                <div class="stat-label">Status</div>
+                <div class="stat-value" id="systemStatus" style="color: #10b981;">● READY</div>
+            </div>
+            <div>
+                <div class="stat-label">Session Time</div>
+                <div class="stat-value" id="sessionTime">00:00:00</div>
+            </div>
+            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 11px;" onclick="logout()">
+                🚪 Logout
+            </button>
         </div>
     </div>
 
-    <!-- Main Application -->
-    <div id="mainApp" style="display: none;">
-        <div class="topnav">
-            <div class="nav-brand">🚗 DRIVER MONITORING PRO</div>
-            <div class="nav-tabs">
-                <div class="nav-tab active" onclick="switchTab('dashboard')">
-                    <span>📊</span>
-                    <span>Dashboard</span>
+    <div class="container">
+        <!-- Dashboard Tab -->
+        <div id="tab-dashboard" class="tab-content active">
+            <div class="dashboard">
+                <div class="left-panel">
+                    <div class="card" style="margin-bottom: 12px;">
+                        <div class="card-title">👤 Driver Info</div>
+                        <div class="info-row">
+                            <span class="info-label">Driver ID</span>
+                            <span class="info-value" id="driverIdDisplay">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Bus ID</span>
+                            <span class="info-value" id="busIdDisplay">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Route</span>
+                            <span class="info-value" id="routeDisplay">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Shift</span>
+                            <span class="info-value">Morning</span>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">🎯 Live Metrics</div>
+                        <div class="metric">
+                            <div class="metric-header">
+                                <span class="metric-label">Attention</span>
+                                <span class="metric-value good" id="attentionValue">100<span style="font-size:13px">%</span></span>
+                            </div>
+                            <div class="progress-bar">
+                                <div id="attentionBar" class="progress-fill" style="width:100%"></div>
+                            </div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-header">
+                                <span class="metric-label">Fatigue</span>
+                                <span class="metric-value good" id="fatigueValue">0<span style="font-size:13px">%</span></span>
+                            </div>
+                            <div class="progress-bar">
+                                <div id="fatigueBar" class="progress-fill" style="width:0%"></div>
+                            </div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-header">
+                                <span class="metric-label">Eye Closure</span>
+                                <span class="metric-value good" id="eyeRate">0.00</span>
+                            </div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-header">
+                                <span class="metric-label">Head Position</span>
+                                <span style="font-size:15px; font-weight:700" id="headPosition">Center</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="nav-tab" onclick="switchTab('gps')">
-                    <span>🗺️</span>
-                    <span>GPS Tracking</span>
+
+                <div class="center-panel">
+                    <div class="video-section">
+                        <div class="video-wrapper">
+                            <video id="video" autoplay playsinline loop muted></video>
+                            <canvas id="canvas"></canvas>
+                            <div id="videoOverlay" class="video-overlay">✓ DRIVER ALERT</div>
+                        </div>
+                        <div class="controls">
+                            <input type="file" id="videoUpload" accept="video/*" style="display:none" multiple>
+                            <button class="btn btn-primary" onclick="document.getElementById('videoUpload').click()">📁 Upload Video(s)</button>
+                            <button class="btn btn-primary" onclick="startWebcam()">📹 Use Webcam</button>
+                            <button class="btn btn-primary" id="startBtn" style="display:none" onclick="startAnalysis()">▶️ Start</button>
+                            <button class="btn btn-danger" id="stopBtn" style="display:none" onclick="stopMonitoring()">⏹ Stop</button>
+                            <button class="btn btn-secondary" onclick="toggleMesh()"><span id="meshToggleText">🔲 Hide Mesh</span></button>
+                            <button class="btn btn-success" onclick="exportDailyReport()">📄 Export Report</button>
+                        </div>
+                    </div>
+                    <div class="charts-row">
+                        <div class="chart-card">
+                            <div class="chart-title">📊 Attention Level</div>
+                            <div class="chart-container"><canvas id="attentionChart"></canvas></div>
+                        </div>
+                        <div class="chart-card">
+                            <div class="chart-title">😴 Fatigue Level</div>
+                            <div class="chart-container"><canvas id="fatigueChart"></canvas></div>
+                        </div>
+                    </div>
                 </div>
-                <div class="nav-tab" onclick="switchTab('analytics')">
-                    <span>📈</span>
-                    <span>Analytics</span>
+
+                <div class="right-panel">
+                    <div class="alerts-summary">
+                        <div class="card-title">⚠️ Alert Summary</div>
+                        <div class="alert-stat">
+                            <span class="alert-stat-label">Critical Alerts</span>
+                            <span class="alert-stat-value" style="color: #ef4444;" id="criticalCount">0</span>
+                        </div>
+                        <div class="alert-stat">
+                            <span class="alert-stat-label">Warnings</span>
+                            <span class="alert-stat-value" style="color: #f59e0b;" id="warningCount">0</span>
+                        </div>
+                        <div class="alert-stat">
+                            <span class="alert-stat-label">Total Events</span>
+                            <span class="alert-stat-value" style="color: #a78bfa;" id="totalEvents">0</span>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">📹 Sessions</div>
+                        <div class="session-list" id="sessionList">
+                            <div style="text-align:center; color:#64748b; padding:20px; font-size:12px">No sessions recorded yet</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="nav-tab" onclick="switchTab('settings')">
-                    <span>⚙️</span>
-                    <span>Settings</span>
-                </div>
-            </div>
-            <div class="nav-stats">
-                <div>
-                    <div class="stat-label">Status</div>
-                    <div class="stat-value" id="systemStatus" style="color: #10b981;">● READY</div>
-                </div>
-                <div>
-                    <div class="stat-label">Session Time</div>
-                    <div class="stat-value" id="sessionTime">00:00:00</div>
-                </div>
-                <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 11px;" onclick="logout()">
-                    🚪 Logout
-                </button>
             </div>
         </div>
 
-        <div class="container">
-            <!-- Dashboard Tab -->
-            <div id="tab-dashboard" class="tab-content active">
-                <div class="dashboard">
-                    <!-- LEFT PANEL -->
-                    <div class="left-panel">
-                        <div class="card" style="margin-bottom: 12px;">
-                            <div class="card-title">👤 Driver Info</div>
-                            <div class="info-row">
-                                <span class="info-label">Driver ID</span>
-                                <span class="info-value" id="driverIdDisplay">-</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">Route</span>
-                                <span class="info-value">KL-101</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">Shift</span>
-                                <span class="info-value">Morning</span>
-                            </div>
-                            <div class="info-row" style="margin-bottom: 0;">
-                                <span class="info-label">Vehicle</span>
-                                <span class="info-value">BUS-RKL-5523</span>
-                            </div>
+        <!-- GPS Tab -->
+        <div id="tab-gps" class="tab-content">
+            <div class="gps-layout">
+                <!-- GPS Sidebar -->
+                <div class="gps-sidebar">
+                    <div class="card">
+                        <div class="card-title">📡 GPS Status</div>
+                        <div id="gpsStatusBadge" class="gps-status-badge acquiring">
+                            <span>⏳</span> Acquiring Signal...
                         </div>
-
-                        <div class="card">
-                            <div class="card-title">🎯 Live Metrics</div>
-                            
-                            <div class="metric">
-                                <div class="metric-header">
-                                    <span class="metric-label">Attention</span>
-                                    <span class="metric-value good" id="attentionValue">100<span style="font-size:13px">%</span></span>
-                                </div>
-                                <div class="progress-bar">
-                                    <div id="attentionBar" class="progress-fill" style="width:100%"></div>
-                                </div>
-                            </div>
-
-                            <div class="metric">
-                                <div class="metric-header">
-                                    <span class="metric-label">Fatigue</span>
-                                    <span class="metric-value good" id="fatigueValue">0<span style="font-size:13px">%</span></span>
-                                </div>
-                                <div class="progress-bar">
-                                    <div id="fatigueBar" class="progress-fill" style="width:0%"></div>
-                                </div>
-                            </div>
-
-                            <div class="metric">
-                                <div class="metric-header">
-                                    <span class="metric-label">Eye Closure</span>
-                                    <span class="metric-value good" id="eyeRate">0.00</span>
-                                </div>
-                            </div>
-
-                            <div class="metric">
-                                <div class="metric-header">
-                                    <span class="metric-label">Head Position</span>
-                                    <span style="font-size:15px; font-weight:700" id="headPosition">Center</span>
-                                </div>
-                            </div>
+                        <div class="coord-box">
+                            <div class="coord-label">X (Longitude)</div>
+                            <div class="coord-value" id="dispLng">—</div>
                         </div>
-                    </div>
-
-                    <!-- CENTER PANEL -->
-                    <div class="center-panel">
-                        <div class="video-section">
-                            <div class="video-wrapper">
-                                <video id="video" autoplay playsinline loop muted></video>
-                                <canvas id="canvas"></canvas>
-                                <div id="videoOverlay" class="video-overlay">✓ DRIVER ALERT</div>
-                            </div>
-                            <div class="controls">
-                                <input type="file" id="videoUpload" accept="video/*" style="display:none" multiple>
-                                <button class="btn btn-primary" onclick="document.getElementById('videoUpload').click()">
-                                    📁 Upload Video(s)
-                                </button>
-                                <button class="btn btn-primary" onclick="startWebcam()">
-                                    📹 Use Webcam
-                                </button>
-                                <button class="btn btn-primary" id="startBtn" style="display:none" onclick="startAnalysis()">
-                                    ▶️ Start
-                                </button>
-                                <button class="btn btn-danger" id="stopBtn" style="display:none" onclick="stopMonitoring()">
-                                    ⏹ Stop
-                                </button>
-                                <button class="btn btn-secondary" onclick="toggleMesh()">
-                                    <span id="meshToggleText">🔲 Hide Mesh</span>
-                                </button>
-                                <button class="btn btn-success" onclick="exportDailyReport()">
-                                    📄 Export Report
-                                </button>
-                            </div>
+                        <div class="coord-box">
+                            <div class="coord-label">Y (Latitude)</div>
+                            <div class="coord-value" id="dispLat">—</div>
                         </div>
-
-                        <div class="charts-row">
-                            <div class="chart-card">
-                                <div class="chart-title">📊 Attention Level</div>
-                                <div class="chart-container">
-                                    <canvas id="attentionChart"></canvas>
-                                </div>
-                            </div>
-                            <div class="chart-card">
-                                <div class="chart-title">😴 Fatigue Level</div>
-                                <div class="chart-container">
-                                    <canvas id="fatigueChart"></canvas>
-                                </div>
-                            </div>
+                        <div class="coord-box">
+                            <div class="coord-label">Accuracy</div>
+                            <div class="coord-value" id="dispAccuracy">—</div>
                         </div>
-                    </div>
-
-                    <!-- RIGHT PANEL -->
-                    <div class="right-panel">
-                        <div class="alerts-summary">
-                            <div class="card-title">⚠️ Alert Summary</div>
-                            <div class="alert-stat">
-                                <span class="alert-stat-label">Critical Alerts</span>
-                                <span class="alert-stat-value" style="color: #ef4444;" id="criticalCount">0</span>
-                            </div>
-                            <div class="alert-stat">
-                                <span class="alert-stat-label">Warnings</span>
-                                <span class="alert-stat-value" style="color: #f59e0b;" id="warningCount">0</span>
-                            </div>
-                            <div class="alert-stat">
-                                <span class="alert-stat-label">Total Events</span>
-                                <span class="alert-stat-value" style="color: #a78bfa;" id="totalEvents">0</span>
-                            </div>
-                        </div>
-
-                        <div class="card">
-                            <div class="card-title">📹 Sessions</div>
-                            <div class="session-list" id="sessionList">
-                                <div style="text-align:center; color:#64748b; padding:20px; font-size:12px">
-                                    No sessions recorded yet
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- GPS Tab -->
-            <div id="tab-gps" class="tab-content">
-                <div style="padding: 15px; height: 100%;">
-                    <div class="card" style="height: 100%; display: flex; flex-direction: column;">
-                        <div class="card-title">🗺️ Live GPS Tracking</div>
-                        <div id="map" style="flex: 1;"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Analytics Tab -->
-            <div id="tab-analytics" class="tab-content">
-                <div style="padding: 20px;">
-                    <h2 style="margin-bottom: 20px; color: #a78bfa;">📈 Performance Analytics</h2>
-                    
-                    <div class="analytics-grid">
-                        <div class="stat-card">
-                            <div class="stat-card-value" style="color: #10b981;" id="totalSessions">0</div>
-                            <div class="stat-card-label">Total Sessions</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-card-value" style="color: #f59e0b;" id="totalIncidents">0</div>
-                            <div class="stat-card-label">Total Incidents</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-card-value" style="color: #3b82f6;" id="avgAttentionDisplay">100%</div>
-                            <div class="stat-card-label">Avg Attention</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-card-value" style="color: #a78bfa;" id="safetyScore">A+</div>
-                            <div class="stat-card-label">Safety Score</div>
+                        <div class="coord-box">
+                            <div class="coord-label">Last Updated</div>
+                            <div class="coord-value" id="dispTime" style="font-size:12px">—</div>
                         </div>
                     </div>
 
                     <div class="card">
-                        <div class="card-title">📊 Session History</div>
-                        <div style="height: 300px;">
-                            <canvas id="historyChart"></canvas>
+                        <div class="card-title">🚌 Vehicle Info</div>
+                        <div class="info-row">
+                            <span class="info-label">Driver ID</span>
+                            <span class="info-value" id="gpsDriverId">—</span>
                         </div>
+                        <div class="info-row">
+                            <span class="info-label">Bus ID</span>
+                            <span class="info-value" id="gpsBusId">—</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Route</span>
+                            <span class="info-value" id="gpsRoute">—</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Status</span>
+                            <span class="info-value" style="color:#10b981">● Active</span>
+                        </div>
+                        <div class="info-row" style="margin-bottom:0">
+                            <span class="info-label">Shift</span>
+                            <span class="info-value">Morning</span>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-title">🧭 Controls</div>
+                        <button class="btn btn-primary" style="width:100%; margin-bottom:8px" onclick="centerOnMe()">📍 Center on My Location</button>
+                        <button class="btn btn-secondary" style="width:100%" onclick="toggleTracking()">
+                            <span id="trackingBtnText">⏸ Pause Tracking</span>
+                        </button>
                     </div>
                 </div>
-            </div>
 
-            <!-- Settings Tab -->
-            <div id="tab-settings" class="tab-content">
-                <div class="settings-container">
-                    <h2 style="margin-bottom: 20px; color: #a78bfa;">⚙️ System Settings</h2>
-
-                    <div class="setting-group">
-                        <h3>🎯 Detection Thresholds</h3>
-                        <div class="setting-item">
-                            <div>
-                                <div class="setting-label">Eye Closure Threshold</div>
-                                <div class="setting-description">Lower = more sensitive (0.15 - 0.30)</div>
-                            </div>
-                            <div style="text-align: right;">
-                                <input type="range" id="earThreshold" min="0.15" max="0.30" step="0.01" value="0.20" oninput="updateThreshold('ear', this.value)">
-                                <div style="font-size: 12px; margin-top: 4px; color: #a78bfa;" id="earValue">0.20</div>
-                            </div>
-                        </div>
-                        <div class="setting-item">
-                            <div>
-                                <div class="setting-label">Head Position Tolerance</div>
-                                <div class="setting-description">Higher = more tolerant (0.03 - 0.10)</div>
-                            </div>
-                            <div style="text-align: right;">
-                                <input type="range" id="headThreshold" min="0.03" max="0.10" step="0.01" value="0.05" oninput="updateThreshold('head', this.value)">
-                                <div style="font-size: 12px; margin-top: 4px; color: #a78bfa;" id="headValue">0.05</div>
-                            </div>
+                <!-- Map -->
+                <div class="gps-map-area">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                        <div class="card-title" style="margin-bottom:0">🗺️ Live GPS Tracking</div>
+                        <div id="liveIndicator" style="display:flex; align-items:center; gap:8px; font-size:11px; color:#10b981; font-weight:700;">
+                            <span class="live-dot"></span> LIVE
                         </div>
                     </div>
-
-                    <div class="setting-group">
-                        <h3>🔔 Alert Settings</h3>
-                        <div class="setting-item">
-                            <div>
-                                <div class="setting-label">Audio Alerts</div>
-                                <div class="setting-description">Enable sound for critical warnings</div>
-                            </div>
-                            <div class="toggle-switch" id="audioToggle" onclick="toggleAudio()">
-                                <div class="toggle-slider"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" onclick="saveSettings()">
-                        💾 Save Settings
-                    </button>
+                    <div id="map"></div>
                 </div>
             </div>
         </div>
+
+        <!-- Analytics Tab -->
+        <div id="tab-analytics" class="tab-content">
+            <div style="padding: 20px;">
+                <h2 style="margin-bottom: 20px; color: #a78bfa;">📈 Performance Analytics</h2>
+                <div class="analytics-grid">
+                    <div class="stat-card">
+                        <div class="stat-card-value" style="color: #10b981;" id="totalSessions">0</div>
+                        <div class="stat-card-label">Total Sessions</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-value" style="color: #f59e0b;" id="totalIncidents">0</div>
+                        <div class="stat-card-label">Total Incidents</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-value" style="color: #3b82f6;" id="avgAttentionDisplay">100%</div>
+                        <div class="stat-card-label">Avg Attention</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-value" style="color: #a78bfa;" id="safetyScore">A+</div>
+                        <div class="stat-card-label">Safety Score</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">📊 Session History</div>
+                    <div style="height: 300px;"><canvas id="historyChart"></canvas></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Tab -->
+        <div id="tab-settings" class="tab-content">
+            <div class="settings-container">
+                <h2 style="margin-bottom: 20px; color: #a78bfa;">⚙️ System Settings</h2>
+                <div class="setting-group">
+                    <h3>🎯 Detection Thresholds</h3>
+                    <div class="setting-item">
+                        <div>
+                            <div class="setting-label">Eye Closure Threshold</div>
+                            <div class="setting-description">Lower = more sensitive (0.15 - 0.30)</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <input type="range" id="earThreshold" min="0.15" max="0.30" step="0.01" value="0.20" oninput="updateThreshold('ear', this.value)">
+                            <div style="font-size: 12px; margin-top: 4px; color: #a78bfa;" id="earValue">0.20</div>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <div>
+                            <div class="setting-label">Head Position Tolerance</div>
+                            <div class="setting-description">Higher = more tolerant (0.03 - 0.10)</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <input type="range" id="headThreshold" min="0.03" max="0.10" step="0.01" value="0.05" oninput="updateThreshold('head', this.value)">
+                            <div style="font-size: 12px; margin-top: 4px; color: #a78bfa;" id="headValue">0.05</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="setting-group">
+                    <h3>🔔 Alert Settings</h3>
+                    <div class="setting-item">
+                        <div>
+                            <div class="setting-label">Audio Alerts</div>
+                            <div class="setting-description">Enable sound for critical warnings</div>
+                        </div>
+                        <div class="toggle-switch" id="audioToggle" onclick="toggleAudio()">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" onclick="saveSettings()">💾 Save Settings</button>
+            </div>
+        </div>
     </div>
+</div>
 
-    <script>
-        let currentUser = null;
-        let faceMesh, camera, isMonitoring = false, showMesh = true;
-        let attentionData = [], fatigueData = [];
-        let sessionStartTime, sessionInterval;
-        let allSessions = [];
-        let currentSession = null;
-        let map, marker;
-        let criticalAlerts = 0, warningAlerts = 0;
-        
-        let settings = {
-            earThreshold: 0.20,
-            headThreshold: 0.05,
-            audioAlerts: false
-        };
+<script>
+    let currentUser = null;
+    let faceMesh, camera, isMonitoring = false, showMesh = true;
+    let attentionData = [], fatigueData = [];
+    let sessionStartTime, sessionInterval;
+    let allSessions = [];
+    let currentSession = null;
+    let map, marker, accuracyCircle;
+    let criticalAlerts = 0, warningAlerts = 0;
+    let watchId = null;
+    let isTrackingPaused = false;
+    let currentLat = null, currentLng = null;
 
-        function login() {
-            const driverId = document.getElementById('loginDriverId').value;
-            const password = document.getElementById('loginPassword').value;
-            
-            if (driverId && password) {
-                currentUser = { id: driverId, loginTime: new Date() };
-                document.getElementById('driverIdDisplay').textContent = driverId;
-                document.getElementById('loginScreen').style.display = 'none';
-                document.getElementById('mainApp').style.display = 'block';
-                initMap();
-                initCharts();
-                loadSessions();
-            } else {
-                alert('Please enter driver ID and password');
-            }
+    let settings = { earThreshold: 0.20, headThreshold: 0.05, audioAlerts: false };
+
+    // Bus route lookup
+    const busRoutes = {
+        'BUS-17B-001': 'Route 17B',
+        'BUS-12A-003': 'Route 12A',
+        'BUS-08C-005': 'Route 08C',
+        'BUS-22D-007': 'Route 22D',
+        'BUS-15B-002': 'Route 15B'
+    };
+
+    function login() {
+        const driverId = document.getElementById('loginDriverId').value;
+        const busId = document.getElementById('loginBusId').value;
+        const password = document.getElementById('loginPassword').value;
+
+        if (driverId && password && busId) {
+            const route = busRoutes[busId] || '—';
+            currentUser = { id: driverId, busId: busId, route: route, loginTime: new Date() };
+
+            // Update displays
+            document.getElementById('driverIdDisplay').textContent = driverId;
+            document.getElementById('busIdDisplay').textContent = busId;
+            document.getElementById('routeDisplay').textContent = route;
+            document.getElementById('gpsDriverId').textContent = driverId;
+            document.getElementById('gpsBusId').textContent = busId;
+            document.getElementById('gpsRoute').textContent = route;
+
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'block';
+            initMap();
+            initCharts();
+            loadSessions();
+        } else {
+            alert('Please fill in all fields');
+        }
+    }
+
+    function logout() {
+        if (confirm('Are you sure you want to logout?')) {
+            stopMonitoring();
+            if (watchId) navigator.geolocation.clearWatch(watchId);
+            currentUser = null;
+            document.getElementById('mainApp').style.display = 'none';
+            document.getElementById('loginScreen').style.display = 'flex';
+        }
+    }
+
+    function switchTab(tabName, el) {
+        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        el.classList.add('active');
+        document.getElementById('tab-' + tabName).classList.add('active');
+        if (tabName === 'gps' && map) {
+            setTimeout(() => map.invalidateSize(), 100);
+        }
+    }
+
+    // ─── CUSTOM BUS ICON ────────────────────────────────────────────
+    function getBusIcon(status) {
+        const color = status === 'active' ? '#10b981' : '#f59e0b';
+        const svg = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="50" viewBox="0 0 40 50">
+                <defs>
+                    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+                        <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.5)"/>
+                    </filter>
+                </defs>
+                <ellipse cx="20" cy="46" rx="8" ry="4" fill="rgba(0,0,0,0.3)"/>
+                <path d="M20 2 L34 38 L20 44 L6 38 Z" fill="${color}" filter="url(#shadow)" opacity="0.9"/>
+                <rect x="8" y="8" width="24" height="26" rx="5" fill="${color}" filter="url(#shadow)"/>
+                <rect x="10" y="10" width="20" height="12" rx="3" fill="rgba(255,255,255,0.9)"/>
+                <circle cx="13" cy="30" r="3" fill="rgba(0,0,0,0.6)"/>
+                <circle cx="27" cy="30" r="3" fill="rgba(0,0,0,0.6)"/>
+                <rect x="14" y="16" width="5" height="8" rx="2" fill="rgba(255,255,255,0.3)"/>
+                <rect x="21" y="16" width="5" height="8" rx="2" fill="rgba(255,255,255,0.3)"/>
+            </svg>`;
+        return L.divIcon({
+            html: svg,
+            className: '',
+            iconSize: [40, 50],
+            iconAnchor: [20, 44],
+            popupAnchor: [0, -44]
+        });
+    }
+
+    // ─── POPUP CONTENT ───────────────────────────────────────────────
+    function buildPopupContent(lat, lng, accuracy) {
+        const u = currentUser;
+        const time = new Date().toLocaleTimeString('en-MY', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        return `
+        <div class="popup-inner">
+            <div class="popup-header">
+                <div class="popup-icon">🚌</div>
+                <div>
+                    <div class="popup-title">${u.busId}</div>
+                    <div class="popup-subtitle">${u.route} &nbsp;|&nbsp; ${u.id}</div>
+                </div>
+            </div>
+            <div class="popup-row">
+                <span class="popup-row-label">Status</span>
+                <span><span class="popup-status active">● ACTIVE</span></span>
+            </div>
+            <div class="popup-row">
+                <span class="popup-row-label">Driver ID</span>
+                <span class="popup-row-value">${u.id}</span>
+            </div>
+            <div class="popup-row">
+                <span class="popup-row-label">Bus ID</span>
+                <span class="popup-row-value">${u.busId}</span>
+            </div>
+            <div class="popup-row">
+                <span class="popup-row-label">Route</span>
+                <span class="popup-row-value">${u.route}</span>
+            </div>
+            <div class="popup-row">
+                <span class="popup-row-label">X (Longitude)</span>
+                <span class="popup-row-value">${lng.toFixed(6)}</span>
+            </div>
+            <div class="popup-row">
+                <span class="popup-row-label">Y (Latitude)</span>
+                <span class="popup-row-value">${lat.toFixed(6)}</span>
+            </div>
+            <div class="popup-row">
+                <span class="popup-row-label">Shift</span>
+                <span class="popup-row-value">Morning</span>
+            </div>
+            <div class="popup-accuracy">
+                📡 GPS Accuracy: ±${Math.round(accuracy)}m &nbsp;|&nbsp; Updated: ${time}
+            </div>
+        </div>`;
+    }
+
+    // ─── INIT MAP ────────────────────────────────────────────────────
+    function initMap() {
+        map = L.map('map', { zoomControl: true }).setView([4.5971, 101.0901], 15);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors',
+            maxZoom: 19
+        }).addTo(map);
+
+        // Start real GPS tracking
+        startGPSTracking();
+    }
+
+    // ─── REAL GPS TRACKING ───────────────────────────────────────────
+    function startGPSTracking() {
+        if (!navigator.geolocation) {
+            setGPSStatus('error', '❌ GPS Not Supported');
+            return;
         }
 
-        function logout() {
-            if (confirm('Are you sure you want to logout?')) {
-                currentUser = null;
-                stopMonitoring();
-                document.getElementById('mainApp').style.display = 'none';
-                document.getElementById('loginScreen').style.display = 'flex';
-            }
-        }
+        setGPSStatus('acquiring', '⏳ Acquiring Signal...');
 
-        function switchTab(tabName) {
-            document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-            
-            event.target.closest('.nav-tab').classList.add('active');
-            document.getElementById('tab-' + tabName).classList.add('active');
-            
-            if (tabName === 'gps' && map) {
-                setTimeout(() => map.invalidateSize(), 100);
-            }
-        }
+        watchId = navigator.geolocation.watchPosition(
+            function(position) {
+                if (isTrackingPaused) return;
 
-        function initMap() {
-            map = L.map('map').setView([3.1390, 101.6869], 13);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap'
-            }).addTo(map);
-            
-            marker = L.marker([3.1390, 101.6869]).addTo(map)
-                .bindPopup('Bus BUS-RKL-5523<br>Route KL-101');
-            
-            setInterval(() => {
-                if (isMonitoring) {
-                    const lat = 3.1390 + (Math.random() - 0.5) * 0.01;
-                    const lng = 101.6869 + (Math.random() - 0.5) * 0.01;
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+                const accuracy = position.coords.accuracy;
+                const time = new Date(position.timestamp);
+
+                currentLat = lat;
+                currentLng = lng;
+
+                // Update sidebar displays
+                document.getElementById('dispLat').textContent = lat.toFixed(6);
+                document.getElementById('dispLng').textContent = lng.toFixed(6);
+                document.getElementById('dispAccuracy').textContent = '±' + Math.round(accuracy) + ' m';
+                document.getElementById('dispTime').textContent = time.toLocaleTimeString('en-MY');
+
+                setGPSStatus('live', '🟢 Live GPS Active');
+
+                const popupContent = buildPopupContent(lat, lng, accuracy);
+
+                // Update or create marker
+                if (!marker) {
+                    marker = L.marker([lat, lng], { icon: getBusIcon('active') })
+                        .addTo(map)
+                        .bindPopup(popupContent, { maxWidth: 280, className: 'custom-popup' });
+
+                    map.setView([lat, lng], 17);
+                } else {
                     marker.setLatLng([lat, lng]);
+                    marker.setPopupContent(popupContent);
                 }
-            }, 5000);
-        }
 
-        const chartConfig = {
-            type: 'line',
+                // Accuracy circle
+                if (accuracyCircle) {
+                    accuracyCircle.setLatLng([lat, lng]).setRadius(accuracy);
+                } else {
+                    accuracyCircle = L.circle([lat, lng], {
+                        radius: accuracy,
+                        color: '#10b981',
+                        fillColor: '#10b981',
+                        fillOpacity: 0.08,
+                        weight: 1.5,
+                        dashArray: '5, 5'
+                    }).addTo(map);
+                }
+            },
+            function(error) {
+                let msg = '❌ Location Error';
+                if (error.code === 1) msg = '❌ Permission Denied';
+                else if (error.code === 2) msg = '❌ Position Unavailable';
+                else if (error.code === 3) msg = '❌ Request Timeout';
+                setGPSStatus('error', msg);
+                console.warn('GPS Error:', error.message);
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 15000,
+                maximumAge: 0
+            }
+        );
+    }
+
+    function setGPSStatus(type, text) {
+        const badge = document.getElementById('gpsStatusBadge');
+        badge.className = 'gps-status-badge ' + type;
+        badge.innerHTML = text;
+    }
+
+    function centerOnMe() {
+        if (currentLat && currentLng) {
+            map.setView([currentLat, currentLng], 18);
+            if (marker) marker.openPopup();
+        } else {
+            alert('GPS location not yet acquired. Please wait...');
+        }
+    }
+
+    function toggleTracking() {
+        isTrackingPaused = !isTrackingPaused;
+        const btn = document.getElementById('trackingBtnText');
+        if (isTrackingPaused) {
+            btn.textContent = '▶ Resume Tracking';
+            setGPSStatus('acquiring', '⏸ Tracking Paused');
+        } else {
+            btn.textContent = '⏸ Pause Tracking';
+            setGPSStatus('live', '🟢 Live GPS Active');
+        }
+    }
+
+    // ─── CHARTS ──────────────────────────────────────────────────────
+    const chartConfig = {
+        type: 'line',
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { beginAtZero: true, min: 0, max: 100, ticks: { color: '#64748b', font: { size: 9 } }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                x: { ticks: { color: '#64748b', maxTicksLimit: 5, font: { size: 8 } }, grid: { color: 'rgba(255,255,255,0.05)' } }
+            }
+        }
+    };
+
+    let attentionChart, fatigueChart, historyChart;
+
+    function initCharts() {
+        attentionChart = new Chart(document.getElementById('attentionChart'), {
+            ...chartConfig,
+            data: { labels: [], datasets: [{ data: [], borderColor: '#10b981', backgroundColor: 'rgba(16,185,129,0.2)', borderWidth: 2, fill: true, tension: 0.4, pointRadius: 0 }] }
+        });
+        fatigueChart = new Chart(document.getElementById('fatigueChart'), {
+            ...chartConfig,
+            data: { labels: [], datasets: [{ data: [], borderColor: '#ef4444', backgroundColor: 'rgba(239,68,68,0.2)', borderWidth: 2, fill: true, tension: 0.4, pointRadius: 0 }] }
+        });
+        historyChart = new Chart(document.getElementById('historyChart'), {
+            type: 'bar',
+            data: {
+                labels: [],
+                datasets: [{ label: 'Avg Attention %', data: [], backgroundColor: 'rgba(16,185,129,0.5)', borderColor: '#10b981', borderWidth: 2 }]
+            },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
+                responsive: true, maintainAspectRatio: false,
                 scales: {
-                    y: { 
-                        beginAtZero: true,
-                        min: 0, 
-                        max: 100, 
-                        ticks: { color: '#64748b', font: { size: 9 } }, 
-                        grid: { color: 'rgba(255,255,255,0.05)' } 
-                    },
-                    x: { ticks: { color: '#64748b', maxTicksLimit: 5, font: { size: 8 } }, grid: { color: 'rgba(255,255,255,0.05)' } }
+                    y: { beginAtZero: true, min: 0, max: 100, ticks: { color: '#64748b' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                    x: { ticks: { color: '#64748b' }, grid: { color: 'rgba(255,255,255,0.05)' } }
                 }
-            }
-        };
-
-        let attentionChart, fatigueChart, historyChart;
-
-        function initCharts() {
-            attentionChart = new Chart(document.getElementById('attentionChart'), {
-                ...chartConfig,
-                data: { labels: [], datasets: [{ data: [], borderColor: '#10b981', backgroundColor: 'rgba(16,185,129,0.2)', borderWidth: 2, fill: true, tension: 0.4, pointRadius: 0 }] }
-            });
-
-            fatigueChart = new Chart(document.getElementById('fatigueChart'), {
-                ...chartConfig,
-                data: { labels: [], datasets: [{ data: [], borderColor: '#ef4444', backgroundColor: 'rgba(239,68,68,0.2)', borderWidth: 2, fill: true, tension: 0.4, pointRadius: 0 }] }
-            });
-
-            historyChart = new Chart(document.getElementById('historyChart'), {
-                type: 'bar',
-                data: {
-                    labels: [],
-                    datasets: [{
-                        label: 'Avg Attention %',
-                        data: [],
-                        backgroundColor: 'rgba(16, 185, 129, 0.5)',
-                        borderColor: '#10b981',
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: { beginAtZero: true, min: 0, max: 100, ticks: { color: '#64748b' }, grid: { color: 'rgba(255,255,255,0.05)' } },
-                        x: { ticks: { color: '#64748b' }, grid: { color: 'rgba(255,255,255,0.05)' } }
-                    }
-                }
-            });
-        }
-
-        function calculateEAR(landmarks, eyePoints) {
-            const v1 = Math.hypot(landmarks[eyePoints[1]].x - landmarks[eyePoints[5]].x, landmarks[eyePoints[1]].y - landmarks[eyePoints[5]].y);
-            const v2 = Math.hypot(landmarks[eyePoints[2]].x - landmarks[eyePoints[4]].x, landmarks[eyePoints[2]].y - landmarks[eyePoints[4]].y);
-            const h = Math.hypot(landmarks[eyePoints[0]].x - landmarks[eyePoints[3]].x, landmarks[eyePoints[0]].y - landmarks[eyePoints[3]].y);
-            return (v1 + v2) / (2.0 * h);
-        }
-
-        function estimateHeadPose(landmarks) {
-            const nose = landmarks[1], leftEye = landmarks[33], rightEye = landmarks[263];
-            const eyeCenter = { x: (leftEye.x + rightEye.x) / 2, y: (leftEye.y + rightEye.y) / 2 };
-            const xOffset = nose.x - eyeCenter.x, yOffset = nose.y - eyeCenter.y;
-            if (Math.abs(xOffset) > settings.headThreshold) return xOffset > 0 ? 'Right' : 'Left';
-            if (yOffset > settings.headThreshold) return 'Down';
-            if (yOffset < -settings.headThreshold) return 'Up';
-            return 'Center';
-        }
-
-        function addAlert(type) {
-            if (type === 'critical') {
-                criticalAlerts++;
-                if (settings.audioAlerts) playAlertSound();
-            } else {
-                warningAlerts++;
-            }
-            updateAlertSummary();
-        }
-
-        function updateAlertSummary() {
-            document.getElementById('criticalCount').textContent = criticalAlerts;
-            document.getElementById('warningCount').textContent = warningAlerts;
-            document.getElementById('totalEvents').textContent = criticalAlerts + warningAlerts;
-        }
-
-        function playAlertSound() {
-            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            const oscillator = audioCtx.createOscillator();
-            oscillator.type = 'sine';
-            oscillator.frequency.value = 800;
-            oscillator.connect(audioCtx.destination);
-            oscillator.start();
-            oscillator.stop(audioCtx.currentTime + 0.2);
-        }
-
-        function updateCharts(attention, fatigue) {
-            const now = new Date().toLocaleTimeString();
-            attentionData.push({ time: now, value: attention });
-            fatigueData.push({ time: now, value: fatigue });
-            
-            if (currentSession) {
-                currentSession.data.push({ timestamp: new Date(), attention, fatigue, location: marker ? marker.getLatLng() : null });
-            }
-            
-            if (attentionData.length > 25) attentionData.shift();
-            if (fatigueData.length > 25) fatigueData.shift();
-            
-            attentionChart.data.labels = attentionData.map(d => d.time);
-            attentionChart.data.datasets[0].data = attentionData.map(d => d.value);
-            attentionChart.update('none');
-            
-            fatigueChart.data.labels = fatigueData.map(d => d.time);
-            fatigueChart.data.datasets[0].data = fatigueData.map(d => d.value);
-            fatigueChart.update('none');
-        }
-
-        function updateSessionTime() {
-            if (!sessionStartTime) return;
-            const elapsed = Math.floor((Date.now() - sessionStartTime) / 1000);
-            const h = String(Math.floor(elapsed / 3600)).padStart(2, '0');
-            const m = String(Math.floor((elapsed % 3600) / 60)).padStart(2, '0');
-            const s = String(elapsed % 60).padStart(2, '0');
-            document.getElementById('sessionTime').textContent = `${h}:${m}:${s}`;
-        }
-
-        function toggleMesh() {
-            showMesh = !showMesh;
-            document.getElementById('meshToggleText').textContent = showMesh ? '🔲 Hide Mesh' : '🔳 Show Mesh';
-        }
-
-        function onResults(results) {
-            const video = document.getElementById('video');
-            const canvas = document.getElementById('canvas');
-            const ctx = canvas.getContext('2d');
-            
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            
-            ctx.save();
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            if (results.multiFaceLandmarks && results.multiFaceLandmarks.length > 0) {
-                const landmarks = results.multiFaceLandmarks[0];
-                
-                if (showMesh) {
-                    ctx.strokeStyle = '#00ff88';
-                    ctx.lineWidth = 1.5;
-                    ctx.shadowBlur = 10;
-                    ctx.shadowColor = '#00ff88';
-                    
-                    for (const conn of window.FACEMESH_TESSELATION) {
-                        const start = landmarks[conn[0]], end = landmarks[conn[1]];
-                        ctx.beginPath();
-                        ctx.moveTo(start.x * canvas.width, start.y * canvas.height);
-                        ctx.lineTo(end.x * canvas.width, end.y * canvas.height);
-                        ctx.stroke();
-                    }
-                    
-                    ctx.fillStyle = '#00ff88';
-                    ctx.shadowBlur = 12;
-                    [1, 33, 133, 263, 362].forEach(idx => {
-                        const pt = landmarks[idx];
-                        ctx.beginPath();
-                        ctx.arc(pt.x * canvas.width, pt.y * canvas.height, 4, 0, 2 * Math.PI);
-                        ctx.fill();
-                    });
-                }
-                
-                const leftEAR = calculateEAR(landmarks, [33, 160, 158, 133, 153, 144]);
-                const rightEAR = calculateEAR(landmarks, [362, 385, 387, 263, 373, 380]);
-                const avgEAR = (leftEAR + rightEAR) / 2;
-                const headPose = estimateHeadPose(landmarks);
-                
-                let attention = 100, fatigue = 0;
-                
-                if (avgEAR < settings.earThreshold) {
-                    fatigue += 40; attention -= 40;
-                    addAlert('critical');
-                } else if (avgEAR < settings.earThreshold + 0.05) {
-                    fatigue += 20; attention -= 20;
-                    addAlert('warning');
-                }
-                
-                if (headPose !== 'Center') {
-                    attention -= 30; fatigue += 15;
-                    addAlert(headPose === 'Down' ? 'critical' : 'warning');
-                }
-                
-                attention = Math.max(0, Math.min(100, attention));
-                fatigue = Math.max(0, Math.min(100, fatigue));
-                
-                updateMetrics(attention, fatigue, avgEAR, headPose);
-                updateCharts(attention, fatigue);
-            }
-            
-            ctx.restore();
-        }
-
-        function updateMetrics(attention, fatigue, ear, headPose) {
-            const attVal = document.getElementById('attentionValue');
-            attVal.innerHTML = Math.round(attention) + '<span style="font-size:13px">%</span>';
-            attVal.className = 'metric-value ' + (attention > 70 ? 'good' : attention > 40 ? 'warning' : 'danger');
-            
-            const attBar = document.getElementById('attentionBar');
-            attBar.style.width = attention + '%';
-            attBar.className = 'progress-fill ' + (attention < 40 ? 'danger' : attention < 70 ? 'warning' : '');
-            
-            const fatVal = document.getElementById('fatigueValue');
-            fatVal.innerHTML = Math.round(fatigue) + '<span style="font-size:13px">%</span>';
-            fatVal.className = 'metric-value ' + (fatigue < 30 ? 'good' : fatigue < 60 ? 'warning' : 'danger');
-            
-            const fatBar = document.getElementById('fatigueBar');
-            fatBar.style.width = fatigue + '%';
-            fatBar.className = 'progress-fill ' + (fatigue > 60 ? 'danger' : fatigue > 30 ? 'warning' : '');
-            
-            document.getElementById('eyeRate').textContent = ear.toFixed(2);
-            document.getElementById('headPosition').textContent = headPose;
-            
-            const overlay = document.getElementById('videoOverlay');
-            if (fatigue > 60 || attention < 40) {
-                overlay.className = 'video-overlay danger blinking';
-                overlay.textContent = '🚨 DANGER: FATIGUED!';
-            } else if (fatigue > 30 || attention < 70) {
-                overlay.className = 'video-overlay warning';
-                overlay.textContent = '⚠️ REDUCED ATTENTION';
-            } else {
-                overlay.className = 'video-overlay';
-                overlay.textContent = '✓ DRIVER ALERT';
-            }
-        }
-
-        async function startWebcam() {
-            try {
-                const video = document.getElementById('video');
-                const canvas = document.getElementById('canvas');
-                
-                faceMesh = new FaceMesh({ locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}` });
-                faceMesh.setOptions({ maxNumFaces: 1, refineLandmarks: true, minDetectionConfidence: 0.5, minTrackingConfidence: 0.5 });
-                faceMesh.onResults(onResults);
-                
-                camera = new Camera(video, {
-                    onFrame: async () => {
-                        if (isMonitoring) await faceMesh.send({ image: video });
-                    },
-                    width: 1280,
-                    height: 720
-                });
-
-                await camera.start();
-                
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
-                
-                startNewSession('webcam');
-                isMonitoring = true;
-                sessionStartTime = Date.now();
-                sessionInterval = setInterval(updateSessionTime, 1000);
-                
-                document.getElementById('startBtn').style.display = 'none';
-                document.getElementById('stopBtn').style.display = 'block';
-                document.getElementById('systemStatus').innerHTML = '● MONITORING';
-                document.getElementById('systemStatus').style.color = '#10b981';
-                
-            } catch (err) {
-                alert('Cannot access webcam: ' + err.message);
-            }
-        }
-
-        document.getElementById('videoUpload').addEventListener('change', (e) => {
-            const files = Array.from(e.target.files);
-            if (files.length > 0) {
-                const startBtn = document.getElementById('startBtn');
-                startBtn.style.display = 'block';
-                startBtn.dataset.files = JSON.stringify(files.map(f => URL.createObjectURL(f)));
-                
-                // Show upload confirmation
-                const uploadBtn = document.querySelector('.btn-primary');
-                uploadBtn.textContent = `📁 ${files.length} Video(s) Ready`;
-                uploadBtn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
-                
-                // Preview first video
-                const video = document.getElementById('video');
-                video.src = files[0].src || URL.createObjectURL(files[0]);
-                video.load();
             }
         });
+    }
 
-        async function startAnalysis() {
+    // ─── FACE DETECTION ──────────────────────────────────────────────
+    function calculateEAR(landmarks, eyePoints) {
+        const v1 = Math.hypot(landmarks[eyePoints[1]].x - landmarks[eyePoints[5]].x, landmarks[eyePoints[1]].y - landmarks[eyePoints[5]].y);
+        const v2 = Math.hypot(landmarks[eyePoints[2]].x - landmarks[eyePoints[4]].x, landmarks[eyePoints[2]].y - landmarks[eyePoints[4]].y);
+        const h = Math.hypot(landmarks[eyePoints[0]].x - landmarks[eyePoints[3]].x, landmarks[eyePoints[0]].y - landmarks[eyePoints[3]].y);
+        return (v1 + v2) / (2.0 * h);
+    }
+
+    function estimateHeadPose(landmarks) {
+        const nose = landmarks[1], leftEye = landmarks[33], rightEye = landmarks[263];
+        const eyeCenter = { x: (leftEye.x + rightEye.x) / 2, y: (leftEye.y + rightEye.y) / 2 };
+        const xOffset = nose.x - eyeCenter.x, yOffset = nose.y - eyeCenter.y;
+        if (Math.abs(xOffset) > settings.headThreshold) return xOffset > 0 ? 'Right' : 'Left';
+        if (yOffset > settings.headThreshold) return 'Down';
+        if (yOffset < -settings.headThreshold) return 'Up';
+        return 'Center';
+    }
+
+    function addAlert(type) {
+        if (type === 'critical') { criticalAlerts++; if (settings.audioAlerts) playAlertSound(); }
+        else { warningAlerts++; }
+        updateAlertSummary();
+    }
+
+    function updateAlertSummary() {
+        document.getElementById('criticalCount').textContent = criticalAlerts;
+        document.getElementById('warningCount').textContent = warningAlerts;
+        document.getElementById('totalEvents').textContent = criticalAlerts + warningAlerts;
+    }
+
+    function playAlertSound() {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioCtx.createOscillator();
+        oscillator.type = 'sine';
+        oscillator.frequency.value = 800;
+        oscillator.connect(audioCtx.destination);
+        oscillator.start();
+        oscillator.stop(audioCtx.currentTime + 0.2);
+    }
+
+    function updateCharts(attention, fatigue) {
+        const now = new Date().toLocaleTimeString();
+        attentionData.push({ time: now, value: attention });
+        fatigueData.push({ time: now, value: fatigue });
+        if (currentSession) {
+            currentSession.data.push({ timestamp: new Date(), attention, fatigue });
+        }
+        if (attentionData.length > 25) attentionData.shift();
+        if (fatigueData.length > 25) fatigueData.shift();
+        attentionChart.data.labels = attentionData.map(d => d.time);
+        attentionChart.data.datasets[0].data = attentionData.map(d => d.value);
+        attentionChart.update('none');
+        fatigueChart.data.labels = fatigueData.map(d => d.time);
+        fatigueChart.data.datasets[0].data = fatigueData.map(d => d.value);
+        fatigueChart.update('none');
+    }
+
+    function updateSessionTime() {
+        if (!sessionStartTime) return;
+        const elapsed = Math.floor((Date.now() - sessionStartTime) / 1000);
+        const h = String(Math.floor(elapsed / 3600)).padStart(2, '0');
+        const m = String(Math.floor((elapsed % 3600) / 60)).padStart(2, '0');
+        const s = String(elapsed % 60).padStart(2, '0');
+        document.getElementById('sessionTime').textContent = `${h}:${m}:${s}`;
+    }
+
+    function toggleMesh() {
+        showMesh = !showMesh;
+        document.getElementById('meshToggleText').textContent = showMesh ? '🔲 Hide Mesh' : '🔳 Show Mesh';
+    }
+
+    function onResults(results) {
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        ctx.save();
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        if (results.multiFaceLandmarks && results.multiFaceLandmarks.length > 0) {
+            const landmarks = results.multiFaceLandmarks[0];
+            if (showMesh) {
+                ctx.strokeStyle = '#00ff88';
+                ctx.lineWidth = 1.5;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = '#00ff88';
+                for (const conn of window.FACEMESH_TESSELATION) {
+                    const start = landmarks[conn[0]], end = landmarks[conn[1]];
+                    ctx.beginPath();
+                    ctx.moveTo(start.x * canvas.width, start.y * canvas.height);
+                    ctx.lineTo(end.x * canvas.width, end.y * canvas.height);
+                    ctx.stroke();
+                }
+                ctx.fillStyle = '#00ff88';
+                ctx.shadowBlur = 12;
+                [1, 33, 133, 263, 362].forEach(idx => {
+                    const pt = landmarks[idx];
+                    ctx.beginPath();
+                    ctx.arc(pt.x * canvas.width, pt.y * canvas.height, 4, 0, 2 * Math.PI);
+                    ctx.fill();
+                });
+            }
+            const leftEAR = calculateEAR(landmarks, [33, 160, 158, 133, 153, 144]);
+            const rightEAR = calculateEAR(landmarks, [362, 385, 387, 263, 373, 380]);
+            const avgEAR = (leftEAR + rightEAR) / 2;
+            const headPose = estimateHeadPose(landmarks);
+            let attention = 100, fatigue = 0;
+            if (avgEAR < settings.earThreshold) { fatigue += 40; attention -= 40; addAlert('critical'); }
+            else if (avgEAR < settings.earThreshold + 0.05) { fatigue += 20; attention -= 20; addAlert('warning'); }
+            if (headPose !== 'Center') { attention -= 30; fatigue += 15; addAlert(headPose === 'Down' ? 'critical' : 'warning'); }
+            attention = Math.max(0, Math.min(100, attention));
+            fatigue = Math.max(0, Math.min(100, fatigue));
+            updateMetrics(attention, fatigue, avgEAR, headPose);
+            updateCharts(attention, fatigue);
+        }
+        ctx.restore();
+    }
+
+    function updateMetrics(attention, fatigue, ear, headPose) {
+        const attVal = document.getElementById('attentionValue');
+        attVal.innerHTML = Math.round(attention) + '<span style="font-size:13px">%</span>';
+        attVal.className = 'metric-value ' + (attention > 70 ? 'good' : attention > 40 ? 'warning' : 'danger');
+        const attBar = document.getElementById('attentionBar');
+        attBar.style.width = attention + '%';
+        attBar.className = 'progress-fill ' + (attention < 40 ? 'danger' : attention < 70 ? 'warning' : '');
+        const fatVal = document.getElementById('fatigueValue');
+        fatVal.innerHTML = Math.round(fatigue) + '<span style="font-size:13px">%</span>';
+        fatVal.className = 'metric-value ' + (fatigue < 30 ? 'good' : fatigue < 60 ? 'warning' : 'danger');
+        const fatBar = document.getElementById('fatigueBar');
+        fatBar.style.width = fatigue + '%';
+        fatBar.className = 'progress-fill ' + (fatigue > 60 ? 'danger' : fatigue > 30 ? 'warning' : '');
+        document.getElementById('eyeRate').textContent = ear.toFixed(2);
+        document.getElementById('headPosition').textContent = headPose;
+        const overlay = document.getElementById('videoOverlay');
+        if (fatigue > 60 || attention < 40) {
+            overlay.className = 'video-overlay danger blinking';
+            overlay.textContent = '🚨 DANGER: FATIGUED!';
+        } else if (fatigue > 30 || attention < 70) {
+            overlay.className = 'video-overlay warning';
+            overlay.textContent = '⚠️ REDUCED ATTENTION';
+        } else {
+            overlay.className = 'video-overlay';
+            overlay.textContent = '✓ DRIVER ALERT';
+        }
+    }
+
+    async function startWebcam() {
+        try {
             const video = document.getElementById('video');
             const canvas = document.getElementById('canvas');
-            const files = JSON.parse(document.getElementById('startBtn').dataset.files || '[]');
-            
-            if (files.length === 0) {
-                alert('Upload videos first!');
-                return;
-            }
-
             faceMesh = new FaceMesh({ locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}` });
             faceMesh.setOptions({ maxNumFaces: 1, refineLandmarks: true, minDetectionConfidence: 0.5, minTrackingConfidence: 0.5 });
             faceMesh.onResults(onResults);
-            
-            let currentFileIndex = 0;
-            
-            async function loadNextVideo() {
-                if (currentFileIndex >= files.length) {
-                    stopMonitoring();
-                    alert('All videos processed!');
-                    return;
-                }
-                
-                video.src = files[currentFileIndex];
-                await new Promise(resolve => video.onloadedmetadata = resolve);
-                
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
-                
-                startNewSession(`video-${currentFileIndex + 1}`);
-                
-                video.play();
-                processVideoFrames();
-                
-                video.onended = () => {
-                    endCurrentSession();
-                    currentFileIndex++;
-                    setTimeout(loadNextVideo, 500);
-                };
-            }
-            
-            async function processVideoFrames() {
-                if (isMonitoring && !video.paused && !video.ended) {
-                    await faceMesh.send({image: video});
-                    requestAnimationFrame(processVideoFrames);
-                }
-            }
-            
+            camera = new Camera(video, {
+                onFrame: async () => { if (isMonitoring) await faceMesh.send({ image: video }); },
+                width: 1280, height: 720
+            });
+            await camera.start();
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            startNewSession('webcam');
             isMonitoring = true;
             sessionStartTime = Date.now();
             sessionInterval = setInterval(updateSessionTime, 1000);
-            
             document.getElementById('startBtn').style.display = 'none';
             document.getElementById('stopBtn').style.display = 'block';
             document.getElementById('systemStatus').innerHTML = '● MONITORING';
             document.getElementById('systemStatus').style.color = '#10b981';
-            
-            loadNextVideo();
+        } catch (err) {
+            alert('Cannot access webcam: ' + err.message);
         }
+    }
 
-        function startNewSession(name) {
-            if (currentSession) {
-                endCurrentSession();
-            }
-            
-            currentSession = {
-                name: name,
-                startTime: new Date(),
-                endTime: null,
-                data: [],
-                criticalAlerts: 0,
-                warningAlerts: 0
-            };
-            
-            criticalAlerts = 0;
-            warningAlerts = 0;
-            attentionData = [];
-            fatigueData = [];
-            updateAlertSummary();
+    document.getElementById('videoUpload').addEventListener('change', (e) => {
+        const files = Array.from(e.target.files);
+        if (files.length > 0) {
+            const startBtn = document.getElementById('startBtn');
+            startBtn.style.display = 'block';
+            startBtn.dataset.files = JSON.stringify(files.map(f => URL.createObjectURL(f)));
+            const video = document.getElementById('video');
+            video.src = URL.createObjectURL(files[0]);
+            video.load();
         }
+    });
 
-        function endCurrentSession() {
-            if (!currentSession) return;
-            
-            currentSession.endTime = new Date();
-            currentSession.criticalAlerts = criticalAlerts;
-            currentSession.warningAlerts = warningAlerts;
-            
-            allSessions.push(currentSession);
-            saveSessions();
-            updateSessionsList();
-            updateAnalytics();
-            
-            currentSession = null;
+    async function startAnalysis() {
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const files = JSON.parse(document.getElementById('startBtn').dataset.files || '[]');
+        if (files.length === 0) { alert('Upload videos first!'); return; }
+        faceMesh = new FaceMesh({ locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}` });
+        faceMesh.setOptions({ maxNumFaces: 1, refineLandmarks: true, minDetectionConfidence: 0.5, minTrackingConfidence: 0.5 });
+        faceMesh.onResults(onResults);
+        let currentFileIndex = 0;
+        async function loadNextVideo() {
+            if (currentFileIndex >= files.length) { stopMonitoring(); alert('All videos processed!'); return; }
+            video.src = files[currentFileIndex];
+            await new Promise(resolve => video.onloadedmetadata = resolve);
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            startNewSession(`video-${currentFileIndex + 1}`);
+            video.play();
+            processVideoFrames();
+            video.onended = () => { endCurrentSession(); currentFileIndex++; setTimeout(loadNextVideo, 500); };
         }
-
-        function stopMonitoring() {
-            isMonitoring = false;
-            if (camera) camera.stop();
-            document.getElementById('video').pause();
-            if (sessionInterval) clearInterval(sessionInterval);
-            
-            endCurrentSession();
-            
-            document.getElementById('startBtn').style.display = 'none';
-            document.getElementById('stopBtn').style.display = 'none';
-            document.getElementById('systemStatus').innerHTML = '● STOPPED';
-            document.getElementById('systemStatus').style.color = '#ef4444';
-        }
-
-        function saveSessions() {
-            localStorage.setItem('driverSessions_' + currentUser.id, JSON.stringify(allSessions));
-        }
-
-        function loadSessions() {
-            const saved = localStorage.getItem('driverSessions_' + currentUser.id);
-            if (saved) {
-                allSessions = JSON.parse(saved);
-                updateSessionsList();
-                updateAnalytics();
+        async function processVideoFrames() {
+            if (isMonitoring && !video.paused && !video.ended) {
+                await faceMesh.send({ image: video });
+                requestAnimationFrame(processVideoFrames);
             }
         }
+        isMonitoring = true;
+        sessionStartTime = Date.now();
+        sessionInterval = setInterval(updateSessionTime, 1000);
+        document.getElementById('startBtn').style.display = 'none';
+        document.getElementById('stopBtn').style.display = 'block';
+        document.getElementById('systemStatus').innerHTML = '● MONITORING';
+        document.getElementById('systemStatus').style.color = '#10b981';
+        loadNextVideo();
+    }
 
-        function updateSessionsList() {
-            const container = document.getElementById('sessionList');
-            if (allSessions.length === 0) {
-                container.innerHTML = '<div style="text-align:center; color:#64748b; padding:20px; font-size:12px">No sessions recorded yet</div>';
-                return;
-            }
-            
-            container.innerHTML = allSessions.map((s, i) => {
-                const avgAttention = s.data.length ? Math.round(s.data.reduce((a, b) => a + b.attention, 0) / s.data.length) : 0;
-                return `
-                    <div class="session-item">
-                        <div style="font-weight: 700; margin-bottom: 4px;">${s.name}</div>
-                        <div style="font-size: 10px; color: #94a3b8;">
-                            ${new Date(s.startTime).toLocaleString()}
-                        </div>
-                        <div style="font-size: 11px; margin-top: 4px;">
-                            Avg Attention: ${avgAttention}% | Alerts: ${s.criticalAlerts + s.warningAlerts}
-                        </div>
-                    </div>
-                `;
-            }).join('');
+    function startNewSession(name) {
+        if (currentSession) endCurrentSession();
+        currentSession = { name, startTime: new Date(), endTime: null, data: [], criticalAlerts: 0, warningAlerts: 0 };
+        criticalAlerts = 0; warningAlerts = 0;
+        attentionData = []; fatigueData = [];
+        updateAlertSummary();
+    }
+
+    function endCurrentSession() {
+        if (!currentSession) return;
+        currentSession.endTime = new Date();
+        currentSession.criticalAlerts = criticalAlerts;
+        currentSession.warningAlerts = warningAlerts;
+        allSessions.push(currentSession);
+        saveSessions(); updateSessionsList(); updateAnalytics();
+        currentSession = null;
+    }
+
+    function stopMonitoring() {
+        isMonitoring = false;
+        if (camera) camera.stop();
+        document.getElementById('video').pause();
+        if (sessionInterval) clearInterval(sessionInterval);
+        endCurrentSession();
+        document.getElementById('startBtn').style.display = 'none';
+        document.getElementById('stopBtn').style.display = 'none';
+        document.getElementById('systemStatus').innerHTML = '● STOPPED';
+        document.getElementById('systemStatus').style.color = '#ef4444';
+    }
+
+    function saveSessions() { localStorage.setItem('driverSessions_' + currentUser.id, JSON.stringify(allSessions)); }
+
+    function loadSessions() {
+        const saved = localStorage.getItem('driverSessions_' + currentUser.id);
+        if (saved) { allSessions = JSON.parse(saved); updateSessionsList(); updateAnalytics(); }
+    }
+
+    function updateSessionsList() {
+        const container = document.getElementById('sessionList');
+        if (allSessions.length === 0) {
+            container.innerHTML = '<div style="text-align:center; color:#64748b; padding:20px; font-size:12px">No sessions recorded yet</div>';
+            return;
         }
+        container.innerHTML = allSessions.map((s) => {
+            const avgAttention = s.data.length ? Math.round(s.data.reduce((a, b) => a + b.attention, 0) / s.data.length) : 0;
+            return `<div class="session-item">
+                <div style="font-weight:700; margin-bottom:4px">${s.name}</div>
+                <div style="font-size:10px; color:#94a3b8">${new Date(s.startTime).toLocaleString()}</div>
+                <div style="font-size:11px; margin-top:4px">Avg Attention: ${avgAttention}% | Alerts: ${s.criticalAlerts + s.warningAlerts}</div>
+            </div>`;
+        }).join('');
+    }
 
-        function updateAnalytics() {
-            document.getElementById('totalSessions').textContent = allSessions.length;
-            
-            const totalIncidents = allSessions.reduce((a, b) => a + b.criticalAlerts + b.warningAlerts, 0);
-            document.getElementById('totalIncidents').textContent = totalIncidents;
-            
-            const avgAttention = allSessions.length ? 
-                Math.round(allSessions.reduce((sum, s) => {
-                    const sessionAvg = s.data.length ? s.data.reduce((a, b) => a + b.attention, 0) / s.data.length : 100;
-                    return sum + sessionAvg;
-                }, 0) / allSessions.length) : 100;
-            
-            document.getElementById('avgAttentionDisplay').textContent = avgAttention + '%';
-            
-            const score = avgAttention > 95 ? 'A+' : avgAttention > 90 ? 'A' : avgAttention > 85 ? 'B+' : avgAttention > 80 ? 'B' : 'C';
-            document.getElementById('safetyScore').textContent = score;
-            
-            historyChart.data.labels = allSessions.map(s => s.name);
-            historyChart.data.datasets[0].data = allSessions.map(s => {
-                return s.data.length ? Math.round(s.data.reduce((a, b) => a + b.attention, 0) / s.data.length) : 0;
-            });
-            historyChart.update();
+    function updateAnalytics() {
+        document.getElementById('totalSessions').textContent = allSessions.length;
+        const totalIncidents = allSessions.reduce((a, b) => a + b.criticalAlerts + b.warningAlerts, 0);
+        document.getElementById('totalIncidents').textContent = totalIncidents;
+        const avgAttention = allSessions.length ?
+            Math.round(allSessions.reduce((sum, s) => {
+                const sessionAvg = s.data.length ? s.data.reduce((a, b) => a + b.attention, 0) / s.data.length : 100;
+                return sum + sessionAvg;
+            }, 0) / allSessions.length) : 100;
+        document.getElementById('avgAttentionDisplay').textContent = avgAttention + '%';
+        const score = avgAttention > 95 ? 'A+' : avgAttention > 90 ? 'A' : avgAttention > 85 ? 'B+' : avgAttention > 80 ? 'B' : 'C';
+        document.getElementById('safetyScore').textContent = score;
+        historyChart.data.labels = allSessions.map(s => s.name);
+        historyChart.data.datasets[0].data = allSessions.map(s =>
+            s.data.length ? Math.round(s.data.reduce((a, b) => a + b.attention, 0) / s.data.length) : 0
+        );
+        historyChart.update();
+    }
+
+    function exportDailyReport() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        doc.setFontSize(20);
+        doc.text('Daily Driver Monitoring Report', 20, 20);
+        doc.setFontSize(12);
+        doc.text(`Driver ID: ${currentUser.id}`, 20, 35);
+        doc.text(`Bus ID: ${currentUser.busId}`, 20, 45);
+        doc.text(`Route: ${currentUser.route}`, 20, 55);
+        doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, 65);
+        doc.text(`Total Sessions: ${allSessions.length}`, 20, 75);
+        if (currentLat && currentLng) {
+            doc.text(`Last Location — X: ${currentLng.toFixed(6)}, Y: ${currentLat.toFixed(6)}`, 20, 85);
         }
+        doc.setFontSize(14);
+        doc.text('Session Summary', 20, 100);
+        doc.setFontSize(10);
+        let y = 110;
+        allSessions.forEach((session, i) => {
+            const avgAttention = session.data.length ?
+                Math.round(session.data.reduce((a, b) => a + b.attention, 0) / session.data.length) : 0;
+            doc.text(`${i + 1}. ${session.name}`, 20, y); y += 7;
+            doc.text(`   Time: ${new Date(session.startTime).toLocaleTimeString()} - ${new Date(session.endTime).toLocaleTimeString()}`, 20, y); y += 7;
+            doc.text(`   Avg Attention: ${avgAttention}%`, 20, y); y += 7;
+            doc.text(`   Alerts: ${session.criticalAlerts} critical, ${session.warningAlerts} warnings`, 20, y); y += 10;
+            if (y > 270) { doc.addPage(); y = 20; }
+        });
+        doc.save(`daily-report-${currentUser.id}-${Date.now()}.pdf`);
+        alert('Daily report exported successfully!');
+    }
 
-        function exportDailyReport() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            
-            doc.setFontSize(20);
-            doc.text('Daily Driver Monitoring Report', 20, 20);
-            
-            doc.setFontSize(12);
-            doc.text(`Driver ID: ${currentUser.id}`, 20, 35);
-            doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, 45);
-            doc.text(`Total Sessions: ${allSessions.length}`, 20, 55);
-            
-            doc.setFontSize(14);
-            doc.text('Session Summary', 20, 70);
-            
-            doc.setFontSize(10);
-            let y = 80;
-            allSessions.forEach((session, i) => {
-                const avgAttention = session.data.length ? 
-                    Math.round(session.data.reduce((a, b) => a + b.attention, 0) / session.data.length) : 0;
-                
-                doc.text(`${i + 1}. ${session.name}`, 20, y);
-                y += 7;
-                doc.text(`   Time: ${new Date(session.startTime).toLocaleTimeString()} - ${new Date(session.endTime).toLocaleTimeString()}`, 20, y);
-                y += 7;
-                doc.text(`   Avg Attention: ${avgAttention}%`, 20, y);
-                y += 7;
-                doc.text(`   Alerts: ${session.criticalAlerts} critical, ${session.warningAlerts} warnings`, 20, y);
-                y += 10;
-                
-                if (y > 270) {
-                    doc.addPage();
-                    y = 20;
-                }
-            });
-            
-            doc.save(`daily-report-${currentUser.id}-${Date.now()}.pdf`);
-            alert('Daily report exported successfully!');
-        }
+    function updateThreshold(type, value) {
+        if (type === 'ear') { settings.earThreshold = parseFloat(value); document.getElementById('earValue').textContent = value; }
+        else if (type === 'head') { settings.headThreshold = parseFloat(value); document.getElementById('headValue').textContent = value; }
+    }
 
-        function updateThreshold(type, value) {
-            if (type === 'ear') {
-                settings.earThreshold = parseFloat(value);
-                document.getElementById('earValue').textContent = value;
-            } else if (type === 'head') {
-                settings.headThreshold = parseFloat(value);
-                document.getElementById('headValue').textContent = value;
-            }
-        }
+    function toggleAudio() {
+        settings.audioAlerts = !settings.audioAlerts;
+        document.getElementById('audioToggle').classList.toggle('active');
+    }
 
-        function toggleAudio() {
-            settings.audioAlerts = !settings.audioAlerts;
-            document.getElementById('audioToggle').classList.toggle('active');
-        }
+    function saveSettings() {
+        localStorage.setItem('driverSettings', JSON.stringify(settings));
+        alert('Settings saved successfully!');
+    }
 
-        function saveSettings() {
-            localStorage.setItem('driverSettings', JSON.stringify(settings));
-            alert('Settings saved successfully!');
-        }
+    const savedSettings = localStorage.getItem('driverSettings');
+    if (savedSettings) {
+        settings = JSON.parse(savedSettings);
+        document.getElementById('earThreshold').value = settings.earThreshold;
+        document.getElementById('headThreshold').value = settings.headThreshold;
+        document.getElementById('earValue').textContent = settings.earThreshold.toFixed(2);
+        document.getElementById('headValue').textContent = settings.headThreshold.toFixed(2);
+        if (settings.audioAlerts) document.getElementById('audioToggle').classList.add('active');
+    }
 
-        const savedSettings = localStorage.getItem('driverSettings');
-        if (savedSettings) {
-            settings = JSON.parse(savedSettings);
-            document.getElementById('earThreshold').value = settings.earThreshold;
-            document.getElementById('headThreshold').value = settings.headThreshold;
-            document.getElementById('earValue').textContent = settings.earThreshold.toFixed(2);
-            document.getElementById('headValue').textContent = settings.headThreshold.toFixed(2);
-            if (settings.audioAlerts) {
-                document.getElementById('audioToggle').classList.add('active');
-            }
-        }
-
-        window.FACEMESH_TESSELATION = [[127,34],[34,139],[139,127],[11,0],[0,37],[37,11],[232,231],[231,120],[120,232],[72,37],[37,39],[39,72],[128,121],[121,47],[47,128],[232,121],[121,128],[128,232],[104,69],[69,67],[67,104],[175,171],[171,148],[148,175],[118,50],[50,101],[101,118],[73,39],[39,40],[40,73],[9,151],[151,108],[108,9],[48,115],[115,131],[131,48],[194,204],[204,211],[211,194],[74,40],[40,185],[185,74],[80,42],[42,183],[183,80],[40,92],[92,186],[186,40],[230,229],[229,118],[118,230],[202,212],[212,214],[214,202],[83,18],[18,17],[17,83],[76,61],[61,146],[146,76],[160,29],[29,30],[30,160],[56,157],[157,173],[173,56],[106,204],[204,194],[194,106],[135,214],[214,192],[192,135],[203,165],[165,98],[98,203],[21,71],[71,68],[68,21],[51,45],[45,4],[4,51],[144,24],[24,23],[23,144],[77,146],[146,91],[91,77],[205,50],[50,187],[187,205],[201,200],[200,18],[18,201],[91,106],[106,182],[182,91],[90,91],[91,181],[181,90],[85,84],[84,17],[17,85],[206,203],[203,36],[36,206],[148,171],[171,140],[140,148],[92,40],[40,39],[39,92],[193,189],[189,244],[244,193],[159,158],[158,28],[28,159],[247,246],[246,161],[161,247],[236,3],[3,196],[196,236],[54,68],[68,104],[104,54],[193,168],[168,8],[8,193],[117,228],[228,31],[31,117],[189,193],[193,55],[55,189],[98,97],[97,99],[99,98],[126,47],[47,100],[100,126],[166,79],[79,218],[218,166],[155,154],[154,26],[26,155],[209,49],[49,131],[131,209],[135,136],[136,150],[150,135],[47,126],[126,217],[217,47],[223,52],[52,53],[53,223],[45,51],[51,134],[134,45],[211,170],[170,140],[140,211],[67,69],[69,108],[108,67],[43,106],[106,91],[91,43],[230,119],[119,120],[120,230],[226,130],[130,247],[247,226],[63,53],[53,52],[52,63],[238,20],[20,242],[242,238],[46,70],[70,156],[156,46],[78,62],[62,96],[96,78],[46,53],[53,63],[63,46],[143,34],[34,227],[227,143],[123,117],[117,111],[111,123],[44,125],[125,19],[19,44],[236,134],[134,51],[51,236],[216,206],[206,205],[205,216],[154,153],[153,22],[22,154],[39,37],[37,167],[167,39],[200,201],[201,208],[208,200],[36,142],[142,100],[100,36],[57,212],[212,202],[202,57],[20,60],[60,99],[99,20],[28,158],[158,157],[157,28],[35,226],[226,113],[113,35],[160,159],[159,27],[27,160],[204,202],[202,210],[210,204],[113,225],[225,46],[46,113],[43,202],[202,204],[204,43],[62,76],[76,77],[77,62],[137,123],[123,116],[116,137],[41,38],[38,72],[72,41],[203,129],[129,142],[142,203],[64,98],[98,240],[240,64],[49,102],[102,64],[64,49],[41,73],[73,74],[74,41],[212,216],[216,207],[207,212],[42,74],[74,184],[184,42],[169,170],[170,211],[211,169],[170,149],[149,176],[176,170],[105,66],[66,69],[69,105],[122,6],[6,168],[168,122],[123,147],[147,187],[187,123],[96,77],[77,90],[90,96],[65,55],[55,107],[107,65],[89,90],[90,180],[180,89],[101,100],[100,120],[120,101],[63,105],[105,104],[104,63],[93,137],[137,227],[227,93],[15,86],[86,85],[85,15],[129,102],[102,49],[49,129],[14,87],[87,86],[86,14],[55,8],[8,9],[9,55],[100,47],[47,121],[121,100],[145,23],[23,22],[22,145],[88,89],[89,179],[179,88],[6,122],[122,196],[196,6],[88,95],[95,96],[96,88],[138,172],[172,136],[136,138],[215,58],[58,172],[172,215],[115,48],[48,219],[219,115],[42,80],[80,81],[81,42],[195,3],[3,51],[51,195],[43,146],[146,61],[61,43],[171,175],[175,199],[199,171],[81,82],[82,38],[38,81],[53,46],[46,225],[225,53],[144,163],[163,110],[110,144],[52,65],[65,66],[66,52],[229,228],[228,117],[117,229],[34,127],[127,234],[234,34],[107,108],[108,69],[69,107],[109,108],[108,151],[151,109],[48,64],[64,235],[235,48],[62,78],[78,191],[191,62],[129,209],[209,126],[126,129],[111,35],[35,143],[143,111],[117,123],[123,50],[50,117],[222,65],[65,52],[52,222],[19,125],[125,141],[141,19],[221,55],[55,65],[65,221],[3,195],[195,197],[197,3],[25,7],[7,33],[33,25],[220,237],[237,44],[44,220],[70,71],[71,139],[139,70],[122,193],[193,245],[245,122],[247,130],[130,33],[33,247],[71,21],[21,162],[162,71],[170,169],[169,150],[150,170],[188,174],[174,196],[196,188],[216,186],[186,92],[92,216],[2,97],[97,167],[167,2],[141,125],[125,241],[241,141],[164,167],[167,37],[37,164],[72,38],[38,12],[12,72],[38,82],[82,13],[13,38],[63,68],[68,71],[71,63],[226,35],[35,111],[111,226],[101,50],[50,205],[205,101],[206,92],[92,165],[165,206],[209,198],[198,217],[217,209],[165,167],[167,97],[97,165],[220,115],[115,218],[218,220],[133,112],[112,243],[243,133],[239,238],[238,241],[241,239],[214,135],[135,169],[169,214],[190,173],[173,133],[133,190],[171,208],[208,32],[32,171],[125,44],[44,237],[237,125],[86,87],[87,178],[178,86],[85,86],[86,179],[179,85],[84,85],[85,180],[180,84],[83,84],[84,181],[181,83],[201,83],[83,182],[182,201],[137,93],[93,132],[132,137],[76,62],[62,183],[183,76],[61,76],[76,184],[184,61],[57,61],[61,185],[185,57],[212,57],[57,186],[186,212],[214,207],[207,187],[187,214],[34,143],[143,156],[156,34],[79,239],[239,237],[237,79],[123,137],[137,177],[177,123],[44,1],[1,4],[4,44],[201,194],[194,32],[32,201],[64,102],[102,129],[129,64],[213,215],[215,138],[138,213],[59,166],[166,219],[219,59],[242,99],[99,97],[97,242],[2,94],[94,141],[141,2],[75,59],[59,235],[235,75],[24,110],[110,228],[228,24],[25,130],[130,226],[226,25],[23,24],[24,229],[229,23],[22,23],[23,230],[230,22],[26,22],[22,231],[231,26],[112,26],[26,232],[232,112],[189,190],[190,243],[243,189],[221,56],[56,190],[190,221],[28,56],[56,221],[221,28],[27,28],[28,222],[222,27],[29,27],[27,223],[223,29],[30,29],[29,224],[224,30],[247,30],[30,225],[225,247],[238,79],[79,20],[20,238],[166,59],[59,75],[75,166],[60,75],[75,240],[240,60],[147,177],[177,215],[215,147],[20,79],[79,166],[166,20],[187,147],[147,213],[213,187],[112,233],[233,244],[244,112],[233,128],[128,245],[245,233],[128,114],[114,188],[188,128],[114,217],[217,174],[174,114],[131,115],[115,220],[220,131],[217,198],[198,236],[236,217],[198,131],[131,134],[134,198],[177,132],[132,58],[58,177],[143,35],[35,124],[124,143],[110,163],[163,7],[7,110],[228,110],[110,25],[25,228],[356,389],[389,368],[368,356],[11,302],[302,267],[267,11],[452,350],[350,349],[349,452],[302,303],[303,269],[269,302],[357,343],[343,277],[277,357],[452,453],[453,357],[357,452],[333,332],[332,297],[297,333],[175,152],[152,377],[377,175],[347,348],[348,330],[330,347],[303,304],[304,270],[270,303],[9,336],[336,337],[337,9],[278,279],[279,360],[360,278],[418,262],[262,431],[431,418],[304,408],[408,409],[409,304],[310,415],[415,407],[407,310],[270,409],[409,410],[410,270],[450,348],[348,347],[347,450],[422,430],[430,434],[434,422],[313,314],[314,17],[17,313],[306,307],[307,375],[375,306],[387,388],[388,260],[260,387],[286,414],[414,398],[398,286],[335,406],[406,418],[418,335],[364,367],[367,416],[416,364],[423,358],[358,327],[327,423],[251,284],[284,298],[298,251],[281,5],[5,4],[4,281],[373,374],[374,253],[253,373],[307,320],[320,321],[321,307],[425,427],[427,411],[411,425],[421,313],[313,18],[18,421],[321,405],[405,406],[406,321],[320,404],[404,405],[405,320],[315,16],[16,17],[17,315],[426,425],[425,266],[266,426],[377,400],[400,369],[369,377],[322,391],[391,269],[269,322],[417,465],[465,464],[464,417],[386,257],[257,258],[258,386],[466,260],[260,388],[388,466],[456,399],[399,419],[419,456],[284,332],[332,333],[333,284],[417,285],[285,8],[8,417],[346,340],[340,261],[261,346],[413,441],[441,285],[285,413],[327,460],[460,328],[328,327],[355,371],[371,329],[329,355],[392,439],[439,438],[438,392],[382,341],[341,256],[256,382],[429,420],[420,360],[360,429],[364,394],[394,379],[379,364],[277,343],[343,437],[437,277],[443,444],[444,283],[283,443],[275,440],[440,363],[363,275],[431,262],[262,369],[369,431],[297,338],[338,337],[337,297],[273,375],[375,321],[321,273],[450,451],[451,349],[349,450],[446,342],[342,467],[467,446],[293,334],[334,282],[282,293],[458,461],[461,462],[462,458],[276,353],[353,383],[383,276],[308,324],[324,325],[325,308],[276,300],[300,293],[293,276],[372,345],[345,447],[447,372],[352,345],[345,340],[340,352],[274,1],[1,19],[19,274],[456,248],[248,281],[281,456],[436,427],[427,425],[425,436],[381,256],[256,252],[252,381],[269,391],[391,393],[393,269],[200,199],[199,428],[428,200],[266,330],[330,329],[329,266],[287,273],[273,422],[422,287],[250,462],[462,328],[328,250],[258,286],[286,384],[384,258],[265,353],[353,342],[342,265],[387,259],[259,257],[257,387],[424,431],[431,430],[430,424],[342,353],[353,276],[276,342],[273,335],[335,424],[424,273],[292,325],[325,307],[307,292],[366,447],[447,345],[345,366],[271,303],[303,302],[302,271],[423,266],[266,371],[371,423],[294,455],[455,460],[460,294],[279,278],[278,294],[294,279],[271,272],[272,304],[304,271],[432,434],[434,427],[427,432],[272,407],[407,408],[408,272],[394,430],[430,431],[431,394],[395,369],[369,400],[400,395],[334,333],[333,299],[299,334],[351,417],[417,168],[168,351],[352,280],[280,411],[411,352],[325,319],[319,320],[320,325],[295,296],[296,336],[336,295],[319,403],[403,404],[404,319],[330,348],[348,349],[349,330],[293,298],[298,333],[333,293],[323,454],[454,447],[447,323],[15,16],[16,315],[315,15],[358,429],[429,279],[279,358],[14,15],[15,316],[316,14],[285,336],[336,9],[9,285],[329,349],[349,350],[350,329],[374,380],[380,252],[252,374],[318,402],[402,403],[403,318],[6,197],[197,419],[419,6],[318,319],[319,325],[325,318],[367,364],[364,365],[365,367],[435,367],[367,397],[397,435],[344,438],[438,439],[439,344],[272,271],[271,311],[311,272],[195,5],[5,281],[281,195],[273,287],[287,291],[291,273],[396,428],[428,199],[199,396],[311,271],[271,268],[268,311],[283,444],[444,445],[445,283],[373,254],[254,339],[339,373],[282,334],[334,296],[296,282],[449,347],[347,346],[346,449],[264,447],[447,454],[454,264],[336,296],[296,299],[299,336],[338,10],[10,151],[151,338],[278,439],[439,455],[455,278],[292,407],[407,415],[415,292],[358,371],[371,355],[355,358],[340,345],[345,372],[372,340],[346,347],[347,280],[280,346],[442,443],[443,282],[282,442],[19,94],[94,370],[370,19],[441,442],[442,295],[295,441],[248,419],[419,197],[197,248],[263,255],[255,359],[359,263],[440,275],[275,274],[274,440],[300,383],[383,368],[368,300],[351,412],[412,465],[465,351],[263,467],[467,466],[466,263],[301,368],[368,389],[389,301],[395,378],[378,379],[379,395],[412,351],[351,419],[419,412],[436,426],[426,322],[322,436],[2,326],[326,370],[370,2],[305,460],[460,455],[455,305],[254,449],[449,448],[448,254],[255,261],[261,446],[446,255],[253,450],[450,449],[449,253],[252,451],[451,450],[450,252],[256,452],[452,451],[451,256],[341,453],[453,452],[452,341],[413,464],[464,463],[463,413],[441,413],[413,414],[414,441],[258,442],[442,441],[441,258],[257,443],[443,442],[442,257],[259,444],[444,443],[443,259],[260,445],[445,444],[444,260],[467,342],[342,445],[445,467],[459,458],[458,250],[250,459],[289,392],[392,290],[290,289],[290,328],[328,460],[460,290],[376,433],[433,435],[435,376],[250,290],[290,392],[392,250],[411,427],[427,434],[434,411],[461,304],[304,271],[271,461]];
-    </script>
+    window.FACEMESH_TESSELATION = [[127,34],[34,139],[139,127],[11,0],[0,37],[37,11],[232,231],[231,120],[120,232],[72,37],[37,39],[39,72],[128,121],[121,47],[47,128],[232,121],[121,128],[128,232],[104,69],[69,67],[67,104],[175,171],[171,148],[148,175],[118,50],[50,101],[101,118],[73,39],[39,40],[40,73],[9,151],[151,108],[108,9],[48,115],[115,131],[131,48],[194,204],[204,211],[211,194],[74,40],[40,185],[185,74],[80,42],[42,183],[183,80],[40,92],[92,186],[186,40],[230,229],[229,118],[118,230],[202,212],[212,214],[214,202],[83,18],[18,17],[17,83],[76,61],[61,146],[146,76],[160,29],[29,30],[30,160],[56,157],[157,173],[173,56],[106,204],[204,194],[194,106],[135,214],[214,192],[192,135],[203,165],[165,98],[98,203],[21,71],[71,68],[68,21],[51,45],[45,4],[4,51],[144,24],[24,23],[23,144],[77,146],[146,91],[91,77],[205,50],[50,187],[187,205],[201,200],[200,18],[18,201],[91,106],[106,182],[182,91],[90,91],[91,181],[181,90],[85,84],[84,17],[17,85],[206,203],[203,36],[36,206],[148,171],[171,140],[140,148],[92,40],[40,39],[39,92],[193,189],[189,244],[244,193],[159,158],[158,28],[28,159],[247,246],[246,161],[161,247],[236,3],[3,196],[196,236],[54,68],[68,104],[104,54],[193,168],[168,8],[8,193],[117,228],[228,31],[31,117],[189,193],[193,55],[55,189],[98,97],[97,99],[99,98],[126,47],[47,100],[100,126],[166,79],[79,218],[218,166],[155,154],[154,26],[26,155],[209,49],[49,131],[131,209],[135,136],[136,150],[150,135],[47,126],[126,217],[217,47],[223,52],[52,53],[53,223],[45,51],[51,134],[134,45],[211,170],[170,140],[140,211],[67,69],[69,108],[108,67],[43,106],[106,91],[91,43],[230,119],[119,120],[120,230],[226,130],[130,247],[247,226],[63,53],[53,52],[52,63],[238,20],[20,242],[242,238],[46,70],[70,156],[156,46],[78,62],[62,96],[96,78],[46,53],[53,63],[63,46],[143,34],[34,227],[227,143],[123,117],[117,111],[111,123],[44,125],[125,19],[19,44],[236,134],[134,51],[51,236],[216,206],[206,205],[205,216],[154,153],[153,22],[22,154],[39,37],[37,167],[167,39],[200,201],[201,208],[208,200],[36,142],[142,100],[100,36],[57,212],[212,202],[202,57],[20,60],[60,99],[99,20],[28,158],[158,157],[157,28],[35,226],[226,113],[113,35],[160,159],[159,27],[27,160],[204,202],[202,210],[210,204],[113,225],[225,46],[46,113],[43,202],[202,204],[204,43],[62,76],[76,77],[77,62],[137,123],[123,116],[116,137],[41,38],[38,72],[72,41],[203,129],[129,142],[142,203],[64,98],[98,240],[240,64],[49,102],[102,64],[64,49],[41,73],[73,74],[74,41],[212,216],[216,207],[207,212],[42,74],[74,184],[184,42],[169,170],[170,211],[211,169],[170,149],[149,176],[176,170],[105,66],[66,69],[69,105],[122,6],[6,168],[168,122],[123,147],[147,187],[187,123],[96,77],[77,90],[90,96],[65,55],[55,107],[107,65],[89,90],[90,180],[180,89],[101,100],[100,120],[120,101],[63,105],[105,104],[104,63],[93,137],[137,227],[227,93],[15,86],[86,85],[85,15],[129,102],[102,49],[49,129],[14,87],[87,86],[86,14],[55,8],[8,9],[9,55],[100,47],[47,121],[121,100],[145,23],[23,22],[22,145],[88,89],[89,179],[179,88],[6,122],[122,196],[196,6],[88,95],[95,96],[96,88],[138,172],[172,136],[136,138],[215,58],[58,172],[172,215],[115,48],[48,219],[219,115],[42,80],[80,81],[81,42],[195,3],[3,51],[51,195],[43,146],[146,61],[61,43],[171,175],[175,199],[199,171],[81,82],[82,38],[38,81],[53,46],[46,225],[225,53],[144,163],[163,110],[110,144],[52,65],[65,66],[66,52],[229,228],[228,117],[117,229],[34,127],[127,234],[234,34],[107,108],[108,69],[69,107],[109,108],[108,151],[151,109],[48,64],[64,235],[235,48],[62,78],[78,191],[191,62],[129,209],[209,126],[126,129],[111,35],[35,143],[143,111],[117,123],[123,50],[50,117],[222,65],[65,52],[52,222],[19,125],[125,141],[141,19],[221,55],[55,65],[65,221],[3,195],[195,197],[197,3],[25,7],[7,33],[33,25],[220,237],[237,44],[44,220],[70,71],[71,139],[139,70],[122,193],[193,245],[245,122],[247,30],[30,225],[225,247],[238,79],[79,20],[20,238],[166,59],[59,75],[75,166],[60,75],[75,240],[240,60],[147,177],[177,215],[215,147],[20,79],[79,166],[166,20],[187,147],[147,213],[213,187],[112,233],[233,244],[244,112],[233,128],[128,245],[245,233],[128,114],[114,188],[188,128],[114,217],[217,174],[174,114],[131,115],[115,220],[220,131],[217,198],[198,236],[236,217],[198,131],[131,134],[134,198],[177,132],[132,58],[58,177],[143,35],[35,124],[124,143],[110,163],[163,7],[7,110],[228,110],[110,25],[25,228],[356,389],[389,368],[368,356],[11,302],[302,267],[267,11],[452,350],[350,349],[349,452],[302,303],[303,269],[269,302],[357,343],[343,277],[277,357],[452,453],[453,357],[357,452],[333,332],[332,297],[297,333],[175,152],[152,377],[377,175],[347,348],[348,330],[330,347],[303,304],[304,270],[270,303],[9,336],[336,337],[337,9],[278,279],[279,360],[360,278],[418,262],[262,431],[431,418],[304,408],[408,409],[409,304],[310,415],[415,407],[407,310],[270,409],[409,410],[410,270],[450,348],[348,347],[347,450],[422,430],[430,434],[434,422],[313,314],[314,17],[17,313],[306,307],[307,375],[375,306],[387,388],[388,260],[260,387],[286,414],[414,398],[398,286],[335,406],[406,418],[418,335],[364,367],[367,416],[416,364],[423,358],[358,327],[327,423],[251,284],[284,298],[298,251],[281,5],[5,4],[4,281],[373,374],[374,253],[253,373],[307,320],[320,321],[321,307],[425,427],[427,411],[411,425],[421,313],[313,18],[18,421],[321,405],[405,406],[406,321],[320,404],[404,405],[405,320],[315,16],[16,17],[17,315],[426,425],[425,266],[266,426],[377,400],[400,369],[369,377],[322,391],[391,269],[269,322],[417,465],[465,464],[464,417],[386,257],[257,258],[258,386],[466,260],[260,388],[388,466],[456,399],[399,419],[419,456],[284,332],[332,333],[333,284],[417,285],[285,8],[8,417],[346,340],[340,261],[261,346],[413,441],[441,285],[285,413],[327,460],[460,328],[328,327],[355,371],[371,329],[329,355],[392,439],[439,438],[438,392],[382,341],[341,256],[256,382],[429,420],[420,360],[360,429],[364,394],[394,379],[379,364],[277,343],[343,437],[437,277],[443,444],[444,283],[283,443],[275,440],[440,363],[363,275],[431,262],[262,369],[369,431],[297,338],[338,337],[337,297],[273,375],[375,321],[321,273],[450,451],[451,349],[349,450],[446,342],[342,467],[467,446],[293,334],[334,282],[282,293],[458,461],[461,462],[462,458],[276,353],[353,383],[383,276],[308,324],[324,325],[325,308],[276,300],[300,293],[293,276],[372,345],[345,447],[447,372],[352,345],[345,340],[340,352],[274,1],[1,19],[19,274],[456,248],[248,281],[281,456],[436,427],[427,425],[425,436],[381,256],[256,252],[252,381],[269,391],[391,393],[393,269],[200,199],[199,428],[428,200],[266,330],[330,329],[329,266],[287,273],[273,422],[422,287],[250,462],[462,328],[328,250],[258,286],[286,384],[384,258],[265,353],[353,342],[342,265],[387,259],[259,257],[257,387],[424,431],[431,430],[430,424],[342,353],[353,276],[276,342],[273,335],[335,424],[424,273],[292,325],[325,307],[307,292],[366,447],[447,345],[345,366],[271,303],[303,302],[302,271],[423,266],[266,371],[371,423],[294,455],[455,460],[460,294],[279,278],[278,294],[294,279],[271,272],[272,304],[304,271],[432,434],[434,427],[427,432],[272,407],[407,408],[408,272],[394,430],[430,431],[431,394],[395,369],[369,400],[400,395],[334,333],[333,299],[299,334],[351,417],[417,168],[168,351],[352,280],[280,411],[411,352],[325,319],[319,320],[320,325],[295,296],[296,336],[336,295],[319,403],[403,404],[404,319],[330,348],[348,349],[349,330],[293,298],[298,333],[333,293],[323,454],[454,447],[447,323],[15,16],[16,315],[315,15],[358,429],[429,279],[279,358],[14,15],[15,316],[316,14],[285,336],[336,9],[9,285],[329,349],[349,350],[350,329],[374,380],[380,252],[252,374],[318,402],[402,403],[403,318],[6,197],[197,419],[419,6],[318,319],[319,325],[325,318],[367,364],[364,365],[365,367],[435,367],[367,397],[397,435],[344,438],[438,439],[439,344],[272,271],[271,311],[311,272],[195,5],[5,281],[281,195],[273,287],[287,291],[291,273],[396,428],[428,199],[199,396],[311,271],[271,268],[268,311],[283,444],[444,445],[445,283],[373,254],[254,339],[339,373],[282,334],[334,296],[296,282],[449,347],[347,346],[346,449],[264,447],[447,454],[454,264],[336,296],[296,299],[299,336],[338,10],[10,151],[151,338],[278,439],[439,455],[455,278],[292,407],[407,415],[415,292],[358,371],[371,355],[355,358],[340,345],[345,372],[372,340],[346,347],[347,280],[280,346],[442,443],[443,282],[282,442],[19,94],[94,370],[370,19],[441,442],[442,295],[295,441],[248,419],[419,197],[197,248],[263,255],[255,359],[359,263],[440,275],[275,274],[274,440],[300,383],[383,368],[368,300],[351,412],[412,465],[465,351],[263,467],[467,466],[466,263],[301,368],[368,389],[389,301],[395,378],[378,379],[379,395],[412,351],[351,419],[419,412],[436,426],[426,322],[322,436],[2,326],[326,370],[370,2],[305,460],[460,455],[455,305],[254,449],[449,448],[448,254],[255,261],[261,446],[446,255],[253,450],[450,449],[449,253],[252,451],[451,450],[450,252],[256,452],[452,451],[451,256],[341,453],[453,452],[452,341],[413,464],[464,463],[463,413],[441,413],[413,414],[414,441],[258,442],[442,441],[441,258],[257,443],[443,442],[442,257],[259,444],[444,443],[443,259],[260,445],[445,444],[444,260],[467,342],[342,445],[445,467],[459,458],[458,250],[250,459],[289,392],[392,290],[290,289],[290,328],[328,460],[460,290],[376,433],[433,435],[435,376],[250,290],[290,392],[392,250],[411,427],[427,434],[434,411],[461,304],[304,271],[271,461]];
+</script>
 </body>
 </html>
