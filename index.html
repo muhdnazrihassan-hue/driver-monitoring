@@ -3,15 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate AI Driver Monitoring System - Fixed</title>
+    <title>Ultimate AI Driver Monitoring System - 3D Map</title>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <!-- Mapbox GL JS for 3D map -->
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
+
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -244,45 +246,50 @@
             border: 1px solid rgba(124, 58, 237, 0.2);
             display: flex;
             flex-direction: column;
+            height: 100%;
+            overflow: hidden;
         }
-        #map { flex: 1; border-radius: 8px; min-height: 0; }
 
-        /* GPS Status Badge */
-        .gps-status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-        .gps-status-badge.acquiring { background: rgba(245,158,11,0.2); color: #f59e0b; border: 1px solid #f59e0b; }
-        .gps-status-badge.live { background: rgba(16,185,129,0.2); color: #10b981; border: 1px solid #10b981; }
-        .gps-status-badge.error { background: rgba(239,68,68,0.2); color: #ef4444; border: 1px solid #ef4444; }
-
-        /* Coordinate display */
-        .coord-box {
-            background: rgba(0,0,0,0.4);
+        /* ===== 3D MAP STYLES ===== */
+        #map {
+            width: 100%;
+            height: 100%;
             border-radius: 8px;
-            padding: 10px;
-            margin-bottom: 8px;
-            border: 1px solid rgba(124, 58, 237, 0.15);
+            overflow: hidden;
         }
-        .coord-label { font-size: 9px; color: #64748b; text-transform: uppercase; margin-bottom: 4px; }
-        .coord-value { font-size: 15px; font-weight: 700; color: #a78bfa; font-family: monospace; }
 
-        /* Leaflet popup custom style */
-        .leaflet-popup-content-wrapper {
+        /* Mapbox overrides for dark theme */
+        .mapboxgl-ctrl-group {
+            background: #1e293b !important;
+            border: 1px solid rgba(124, 58, 237, 0.4) !important;
+        }
+        .mapboxgl-ctrl-group button {
+            background-color: transparent !important;
+            color: white !important;
+        }
+        .mapboxgl-ctrl-group button:hover {
+            background-color: rgba(124, 58, 237, 0.3) !important;
+        }
+        .mapboxgl-ctrl-icon { filter: invert(1); }
+        .mapboxgl-ctrl-attrib {
+            background: rgba(10,14,26,0.8) !important;
+            color: #64748b !important;
+            font-size: 9px !important;
+        }
+        .mapboxgl-ctrl-attrib a { color: #7c3aed !important; }
+
+        /* Custom 3D popup */
+        .mapboxgl-popup-content {
             background: #1e293b !important;
             color: white !important;
             border: 1px solid rgba(124, 58, 237, 0.5) !important;
             border-radius: 10px !important;
             box-shadow: 0 8px 30px rgba(0,0,0,0.6) !important;
+            padding: 0 !important;
         }
-        .leaflet-popup-tip { background: #1e293b !important; }
-        .leaflet-popup-content { margin: 0 !important; padding: 0 !important; }
+        .mapboxgl-popup-tip {
+            border-top-color: rgba(124, 58, 237, 0.5) !important;
+        }
         .popup-inner { padding: 14px; min-width: 220px; }
         .popup-header {
             display: flex;
@@ -322,6 +329,39 @@
             padding-top: 8px;
             border-top: 1px solid rgba(255,255,255,0.05);
         }
+
+        /* 3D Map Controls */
+        .map-3d-controls {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* GPS Status Badge */
+        .gps-status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .gps-status-badge.acquiring { background: rgba(245,158,11,0.2); color: #f59e0b; border: 1px solid #f59e0b; }
+        .gps-status-badge.live { background: rgba(16,185,129,0.2); color: #10b981; border: 1px solid #10b981; }
+        .gps-status-badge.error { background: rgba(239,68,68,0.2); color: #ef4444; border: 1px solid #ef4444; }
+
+        .coord-box {
+            background: rgba(0,0,0,0.4);
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 8px;
+            border: 1px solid rgba(124, 58, 237, 0.15);
+        }
+        .coord-label { font-size: 9px; color: #64748b; text-transform: uppercase; margin-bottom: 4px; }
+        .coord-value { font-size: 15px; font-weight: 700; color: #a78bfa; font-family: monospace; }
 
         .analytics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 15px; }
         .stat-card {
@@ -375,7 +415,6 @@
         }
         .session-item.active { border-left-color: #10b981; background: rgba(16, 185, 129, 0.1); }
 
-        /* Pulsing dot for live GPS */
         @keyframes ripple {
             0% { transform: scale(1); opacity: 1; }
             100% { transform: scale(3); opacity: 0; }
@@ -395,6 +434,55 @@
             background: #10b981;
             border-radius: 50%;
             animation: ripple 1.5s infinite;
+        }
+
+        /* Pitch/Bearing indicator */
+        .map-info-overlay {
+            position: absolute;
+            bottom: 12px;
+            left: 12px;
+            background: rgba(10,14,26,0.85);
+            border: 1px solid rgba(124,58,237,0.4);
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 10px;
+            color: #a78bfa;
+            pointer-events: none;
+            z-index: 10;
+            font-family: monospace;
+        }
+
+        /* Mapbox token notice */
+        .token-notice {
+            background: rgba(245,158,11,0.15);
+            border: 1px solid #f59e0b;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 10px;
+            font-size: 11px;
+            color: #fbbf24;
+            line-height: 1.6;
+        }
+        .token-notice input {
+            width: 100%;
+            margin-top: 8px;
+            background: #0f172a;
+            border: 1px solid rgba(245,158,11,0.4);
+            border-radius: 6px;
+            padding: 8px;
+            color: white;
+            font-size: 11px;
+        }
+        .token-notice button {
+            margin-top: 6px;
+            padding: 6px 14px;
+            background: #f59e0b;
+            color: #000;
+            border: none;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -439,10 +527,13 @@
                 <span>📊</span><span>Dashboard</span>
             </div>
             <div class="nav-tab" onclick="switchTab('gps', this)">
-                <span>🗺️</span><span>GPS Tracking</span>
+                <span>🗺️</span><span>GPS Tracking 3D</span>
             </div>
             <div class="nav-tab" onclick="switchTab('analytics', this)">
                 <span>📈</span><span>Analytics</span>
+            </div>
+            <div class="nav-tab" onclick="switchTab('history', this)">
+                <span>🛣️</span><span>Route History</span>
             </div>
             <div class="nav-tab" onclick="switchTab('settings', this)">
                 <span>⚙️</span><span>Settings</span>
@@ -577,11 +668,19 @@
             </div>
         </div>
 
-        <!-- GPS Tab -->
+        <!-- GPS Tab — 3D MAP -->
         <div id="tab-gps" class="tab-content">
             <div class="gps-layout">
                 <!-- GPS Sidebar -->
                 <div class="gps-sidebar">
+                    <!-- Mapbox Token Input -->
+                    <div class="token-notice" id="tokenNotice" style="display:none;">
+                        ⚠️ <strong>Mapbox Token Required</strong><br>
+                        Get a free token at <strong>mapbox.com</strong> → Account → Tokens
+                        <input type="text" id="mapboxTokenInput" placeholder="pk.eyJ1Ijoixxxxxxx...">
+                        <button onclick="applyMapboxToken()">Apply Token</button>
+                    </div>
+
                     <div class="card">
                         <div class="card-title">📡 GPS Status</div>
                         <div id="gpsStatusBadge" class="gps-status-badge acquiring">
@@ -598,6 +697,10 @@
                         <div class="coord-box">
                             <div class="coord-label">Accuracy</div>
                             <div class="coord-value" id="dispAccuracy">—</div>
+                        </div>
+                        <div class="coord-box">
+                            <div class="coord-label">Altitude</div>
+                            <div class="coord-value" id="dispAltitude">—</div>
                         </div>
                         <div class="coord-box">
                             <div class="coord-label">Last Updated</div>
@@ -630,23 +733,43 @@
                     </div>
 
                     <div class="card">
-                        <div class="card-title">🧭 Controls</div>
+                        <div class="card-title">🧭 3D Map Controls</div>
                         <button class="btn btn-primary" style="width:100%; margin-bottom:8px" onclick="centerOnMe()">📍 Center on My Location</button>
-                        <button class="btn btn-secondary" style="width:100%" onclick="toggleTracking()">
+                        <button class="btn btn-secondary" style="width:100%; margin-bottom:8px" onclick="toggleTracking()">
                             <span id="trackingBtnText">⏸ Pause Tracking</span>
                         </button>
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:4px;">
+                            <button class="btn btn-secondary" onclick="map3d && map3d.easeTo({pitch: 0, bearing: 0})">🔭 Top View</button>
+                            <button class="btn btn-secondary" onclick="map3d && map3d.easeTo({pitch: 60, bearing: -30})">🏙️ 3D View</button>
+                            <button class="btn btn-secondary" onclick="map3d && map3d.easeTo({pitch: 80})">👁️ Street View</button>
+                            <button class="btn btn-secondary" onclick="toggle3DBuildings()">🏢 Buildings</button>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Map -->
+                <!-- 3D Map -->
                 <div class="gps-map-area">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                        <div class="card-title" style="margin-bottom:0">🗺️ Live GPS Tracking</div>
+                        <div class="card-title" style="margin-bottom:0">🌐 Live 3D GPS Tracking</div>
                         <div id="liveIndicator" style="display:flex; align-items:center; gap:8px; font-size:11px; color:#10b981; font-weight:700;">
-                            <span class="live-dot"></span> LIVE
+                            <span class="live-dot"></span> LIVE 3D
                         </div>
                     </div>
-                    <div id="map"></div>
+                    <div style="position:relative; flex:1; min-height:0;">
+                        <div id="map"></div>
+                        <div class="map-info-overlay" id="mapInfoOverlay">
+                            🧭 Pitch: <span id="pitchDisplay">60°</span> &nbsp;|&nbsp;
+                            🔄 Bearing: <span id="bearingDisplay">0°</span>
+                        </div>
+                    </div>
+                    <!-- 3D map style switcher -->
+                    <div class="map-3d-controls">
+                        <span style="font-size:10px; color:#64748b; align-self:center;">Map Style:</span>
+                        <button class="btn btn-secondary" onclick="setMapStyle('dark')" style="padding:5px 10px; font-size:10px;">🌑 Dark</button>
+                        <button class="btn btn-secondary" onclick="setMapStyle('satellite')" style="padding:5px 10px; font-size:10px;">🛰️ Satellite</button>
+                        <button class="btn btn-secondary" onclick="setMapStyle('streets')" style="padding:5px 10px; font-size:10px;">🗺️ Streets</button>
+                        <button class="btn btn-secondary" onclick="setMapStyle('outdoors')" style="padding:5px 10px; font-size:10px;">🌿 Terrain</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -719,7 +842,67 @@
                         </div>
                     </div>
                 </div>
+                <div class="setting-group">
+                    <h3>🌐 Mapbox Token</h3>
+                    <div class="setting-item">
+                        <div>
+                            <div class="setting-label">API Token</div>
+                            <div class="setting-description">Required for 3D map. Get free at mapbox.com</div>
+                        </div>
+                    </div>
+                    <input type="text" id="settingsMapboxToken" placeholder="pk.eyJ1Ijoixxxxxxx..." style="width:100%; background:#0f172a; border:1px solid rgba(124,58,237,0.3); border-radius:8px; padding:10px; color:white; font-size:12px; margin-bottom:8px;">
+                    <button class="btn btn-primary" onclick="applyMapboxTokenFromSettings()">Apply Mapbox Token</button>
+                </div>
                 <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" onclick="saveSettings()">💾 Save Settings</button>
+            </div>
+        </div>
+
+        <!-- Route History Tab -->
+        <div id="tab-history" class="tab-content">
+            <div style="display:grid; grid-template-columns:320px 1fr; gap:12px; padding:12px; height:100%;">
+                <div style="overflow-y:auto; display:flex; flex-direction:column; gap:12px;">
+                    <div class="card">
+                        <div class="card-title">🛣️ Saved Routes</div>
+                        <div style="font-size:10px; color:#64748b; margin-bottom:10px;">Routes auto-saved when you pause or logout</div>
+                        <div id="routeHistoryList">
+                            <div style="text-align:center; color:#64748b; padding:20px; font-size:12px;">Loading routes...</div>
+                        </div>
+                        <button class="btn btn-danger" style="width:100%; margin-top:10px; font-size:11px;" onclick="clearAllRoutes()">🗑️ Clear All Routes</button>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">📤 Export Route</div>
+                        <div style="font-size:11px; color:#94a3b8; margin-bottom:10px;">Select a route first:</div>
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+                            <button class="btn btn-success" onclick="exportRoute('geojson')" style="font-size:10px;">🗺️ GeoJSON</button>
+                            <button class="btn btn-success" onclick="exportRoute('csv')" style="font-size:10px;">📊 CSV</button>
+                            <button class="btn btn-success" onclick="exportRoute('kml')" style="font-size:10px;">🌍 KML</button>
+                            <button class="btn btn-success" onclick="exportRoute('gpx')" style="font-size:10px;">📍 GPX</button>
+                        </div>
+                        <button class="btn btn-primary" onclick="exportRoute('json')" style="width:100%; margin-top:6px; font-size:10px;">💾 Full JSON</button>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">📊 Route Stats</div>
+                        <div id="routeStats">
+                            <div style="text-align:center; color:#64748b; font-size:11px; padding:10px;">Select a route to view stats</div>
+                        </div>
+                    </div>
+                </div>
+                <div style="background:#1e293b; border-radius:10px; padding:12px; border:1px solid rgba(124,58,237,0.2); display:flex; flex-direction:column; height:100%;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                        <div class="card-title" style="margin-bottom:0;">🗺️ Route Replay</div>
+                        <div style="display:flex; gap:6px;">
+                            <button class="btn btn-secondary" onclick="historyMap && historyMap.easeTo({pitch:0,bearing:0})" style="font-size:10px; padding:4px 10px;">🔭 Top</button>
+                            <button class="btn btn-secondary" onclick="historyMap && historyMap.easeTo({pitch:60,bearing:-20})" style="font-size:10px; padding:4px 10px;">🏙️ 3D</button>
+                        </div>
+                    </div>
+                    <div style="position:relative; flex:1; min-height:400px;">
+                        <div id="historyMap" style="position:absolute; top:0; left:0; right:0; bottom:0; border-radius:8px;"></div>
+                        <div id="historyMapPlaceholder" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; color:#64748b; pointer-events:none;">
+                            <div style="font-size:40px; margin-bottom:10px;">🛣️</div>
+                            <div style="font-size:13px;">Select a route to view it here</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -732,15 +915,27 @@
     let sessionStartTime, sessionInterval;
     let allSessions = [];
     let currentSession = null;
-    let map, marker, accuracyCircle;
+    let map3d = null;
+    let busMarkerEl = null;
+    let busMarker3d = null;
+    let routeCoords = [];
+    let routeLayerAdded = false;
+    let buildings3dVisible = true;
     let criticalAlerts = 0, warningAlerts = 0;
     let watchId = null;
     let isTrackingPaused = false;
     let currentLat = null, currentLng = null;
+    let mapboxToken = 'pk.eyJ1IjoibmF6cmloYXNzYW45NSIsImEiOiJjbW0xaWptamEwYWp0MnBvcWYzMjl3dmI0In0.iJPCs_K2YynxhHnrg2La5g';
+    let currentMapStyle = 'dark';
+    let mapInitialized = false;
 
     let settings = { earThreshold: 0.20, headThreshold: 0.05, audioAlerts: false };
+    let allRoutes = [];
+    let selectedRouteIndex = null;
+    let historyMap = null;
+    let historyMapInitialized = false;
+    let currentRouteSession = { points: [], startTime: null, driver: null, bus: null, route: null, id: null };
 
-    // Bus route lookup
     const busRoutes = {
         'BUS-17B-001': 'Route 17B',
         'BUS-12A-003': 'Route 12A',
@@ -749,28 +944,33 @@
         'BUS-15B-002': 'Route 15B'
     };
 
+    const mapStyles = {
+        dark: 'mapbox://styles/mapbox/dark-v11',
+        satellite: 'mapbox://styles/mapbox/satellite-streets-v12',
+        streets: 'mapbox://styles/mapbox/streets-v12',
+        outdoors: 'mapbox://styles/mapbox/outdoors-v12'
+    };
+
     function login() {
         const driverId = document.getElementById('loginDriverId').value;
         const busId = document.getElementById('loginBusId').value;
         const password = document.getElementById('loginPassword').value;
-
         if (driverId && password && busId) {
             const route = busRoutes[busId] || '—';
             currentUser = { id: driverId, busId: busId, route: route, loginTime: new Date() };
-
-            // Update displays
             document.getElementById('driverIdDisplay').textContent = driverId;
             document.getElementById('busIdDisplay').textContent = busId;
             document.getElementById('routeDisplay').textContent = route;
             document.getElementById('gpsDriverId').textContent = driverId;
             document.getElementById('gpsBusId').textContent = busId;
             document.getElementById('gpsRoute').textContent = route;
-
             document.getElementById('loginScreen').style.display = 'none';
             document.getElementById('mainApp').style.display = 'block';
-            initMap();
             initCharts();
             loadSessions();
+            loadRoutes();
+            document.getElementById('tokenNotice').style.display = 'none';
+            setTimeout(() => { initMap3D(); }, 300);
         } else {
             alert('Please fill in all fields');
         }
@@ -780,6 +980,7 @@
         if (confirm('Are you sure you want to logout?')) {
             stopMonitoring();
             if (watchId) navigator.geolocation.clearWatch(watchId);
+            saveCurrentRoute();
             currentUser = null;
             document.getElementById('mainApp').style.display = 'none';
             document.getElementById('loginScreen').style.display = 'flex';
@@ -791,43 +992,202 @@
         document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
         el.classList.add('active');
         document.getElementById('tab-' + tabName).classList.add('active');
-        if (tabName === 'gps' && map) {
-            setTimeout(() => map.invalidateSize(), 100);
+        if (tabName === 'gps') {
+            setTimeout(() => { if (map3d) map3d.resize(); }, 200);
+        }
+        if (tabName === 'history') {
+            updateRouteHistoryList();
+            setTimeout(() => { if (historyMap) historyMap.resize(); }, 200);
         }
     }
 
-    // ─── CUSTOM BUS ICON ────────────────────────────────────────────
-    function getBusIcon(status) {
-        const color = status === 'active' ? '#10b981' : '#f59e0b';
-        const svg = `
-            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="50" viewBox="0 0 40 50">
-                <defs>
-                    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-                        <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.5)"/>
-                    </filter>
-                </defs>
-                <ellipse cx="20" cy="46" rx="8" ry="4" fill="rgba(0,0,0,0.3)"/>
-                <path d="M20 2 L34 38 L20 44 L6 38 Z" fill="${color}" filter="url(#shadow)" opacity="0.9"/>
-                <rect x="8" y="8" width="24" height="26" rx="5" fill="${color}" filter="url(#shadow)"/>
-                <rect x="10" y="10" width="20" height="12" rx="3" fill="rgba(255,255,255,0.9)"/>
-                <circle cx="13" cy="30" r="3" fill="rgba(0,0,0,0.6)"/>
-                <circle cx="27" cy="30" r="3" fill="rgba(0,0,0,0.6)"/>
-                <rect x="14" y="16" width="5" height="8" rx="2" fill="rgba(255,255,255,0.3)"/>
-                <rect x="21" y="16" width="5" height="8" rx="2" fill="rgba(255,255,255,0.3)"/>
-            </svg>`;
-        return L.divIcon({
-            html: svg,
-            className: '',
-            iconSize: [40, 50],
-            iconAnchor: [20, 44],
-            popupAnchor: [0, -44]
-        });
+    // ─── MAPBOX TOKEN ─────────────────────────────────────────────────
+    function applyMapboxToken() {
+        const token = document.getElementById('mapboxTokenInput').value.trim();
+        if (!token.startsWith('pk.')) {
+            alert('Invalid token. Must start with pk.');
+            return;
+        }
+        mapboxToken = token;
+        localStorage.setItem('mapboxToken', token);
+        document.getElementById('tokenNotice').style.display = 'none';
+        document.getElementById('settingsMapboxToken').value = token;
+        if (!mapInitialized) initMap3D();
     }
 
-    // ─── POPUP CONTENT ───────────────────────────────────────────────
-    function buildPopupContent(lat, lng, accuracy) {
+    function applyMapboxTokenFromSettings() {
+        const token = document.getElementById('settingsMapboxToken').value.trim();
+        document.getElementById('mapboxTokenInput').value = token;
+        applyMapboxToken();
+    }
+
+    // ─── INIT 3D MAP ─────────────────────────────────────────────────
+    function initMap3D() {
+        if (!mapboxToken) {
+            setGPSStatus('error', '❌ Token Required');
+            return;
+        }
+        mapboxgl.accessToken = mapboxToken;
+
+        try {
+            map3d = new mapboxgl.Map({
+                container: 'map',
+                style: mapStyles.dark,
+                center: [101.0901, 4.5971], // Default: Malaysia
+                zoom: 15,
+                pitch: 60,
+                bearing: -20,
+                antialias: true
+            });
+
+            // Add navigation controls
+            map3d.addControl(new mapboxgl.NavigationControl(), 'top-right');
+            map3d.addControl(new mapboxgl.ScaleControl(), 'bottom-right');
+            map3d.addControl(new mapboxgl.FullscreenControl(), 'top-right');
+
+            // Update pitch/bearing display on move
+            map3d.on('move', () => {
+                document.getElementById('pitchDisplay').textContent = Math.round(map3d.getPitch()) + '°';
+                document.getElementById('bearingDisplay').textContent = Math.round(map3d.getBearing()) + '°';
+            });
+
+            // On style load, add 3D features
+            map3d.on('style.load', () => {
+                add3DBuildings();
+                addTerrainLayer();
+                if (routeCoords.length > 1) addRouteLayer();
+            });
+
+            map3d.on('load', () => {
+                add3DBuildings();
+                addTerrainLayer();
+                mapInitialized = true;
+                startGPSTracking();
+            });
+
+        } catch(e) {
+            setGPSStatus('error', '❌ Map Init Failed');
+            console.error('Map error:', e);
+        }
+    }
+
+    // ─── 3D BUILDINGS ────────────────────────────────────────────────
+    function add3DBuildings() {
+        if (!map3d) return;
+        try {
+            if (map3d.getLayer('3d-buildings')) return;
+            map3d.addLayer({
+                id: '3d-buildings',
+                source: 'composite',
+                'source-layer': 'building',
+                filter: ['==', 'extrude', 'true'],
+                type: 'fill-extrusion',
+                minzoom: 12,
+                paint: {
+                    'fill-extrusion-color': [
+                        'interpolate', ['linear'], ['get', 'height'],
+                        0, '#1e3a8a',
+                        50, '#3b82f6',
+                        100, '#7c3aed',
+                        200, '#a78bfa'
+                    ],
+                    'fill-extrusion-height': ['get', 'height'],
+                    'fill-extrusion-base': ['get', 'min_height'],
+                    'fill-extrusion-opacity': 0.75
+                }
+            });
+        } catch(e) { /* satellite style has no buildings layer */ }
+    }
+
+    // ─── TERRAIN (3D hills) ───────────────────────────────────────────
+    function addTerrainLayer() {
+        if (!map3d) return;
+        try {
+            if (!map3d.getSource('mapbox-dem')) {
+                map3d.addSource('mapbox-dem', {
+                    type: 'raster-dem',
+                    url: 'mapbox://mapbox.mapbox-terrain-dem-v1',
+                    tileSize: 512,
+                    maxzoom: 14
+                });
+                map3d.setTerrain({ source: 'mapbox-dem', exaggeration: 1.5 });
+            }
+        } catch(e) {}
+    }
+
+    function toggle3DBuildings() {
+        if (!map3d || !map3d.getLayer('3d-buildings')) return;
+        buildings3dVisible = !buildings3dVisible;
+        map3d.setLayoutProperty('3d-buildings', 'visibility', buildings3dVisible ? 'visible' : 'none');
+    }
+
+    // ─── ROUTE TRAIL LAYER ────────────────────────────────────────────
+    function addRouteLayer() {
+        if (!map3d || routeCoords.length < 2) return;
+        try {
+            if (map3d.getSource('route-trail')) {
+                map3d.getSource('route-trail').setData({
+                    type: 'Feature',
+                    geometry: { type: 'LineString', coordinates: routeCoords }
+                });
+            } else {
+                map3d.addSource('route-trail', {
+                    type: 'geojson',
+                    data: { type: 'Feature', geometry: { type: 'LineString', coordinates: routeCoords } }
+                });
+                map3d.addLayer({
+                    id: 'route-trail',
+                    type: 'line',
+                    source: 'route-trail',
+                    layout: { 'line-join': 'round', 'line-cap': 'round' },
+                    paint: {
+                        'line-color': '#10b981',
+                        'line-width': 4,
+                        'line-opacity': 0.8,
+                        'line-blur': 1
+                    }
+                });
+                // Glow effect
+                map3d.addLayer({
+                    id: 'route-trail-glow',
+                    type: 'line',
+                    source: 'route-trail',
+                    layout: { 'line-join': 'round', 'line-cap': 'round' },
+                    paint: {
+                        'line-color': '#10b981',
+                        'line-width': 12,
+                        'line-opacity': 0.2,
+                        'line-blur': 4
+                    }
+                }, 'route-trail');
+                routeLayerAdded = true;
+            }
+        } catch(e) {}
+    }
+
+    // ─── CUSTOM BUS MARKER ───────────────────────────────────────────
+    function createBusMarkerElement() {
+        const el = document.createElement('div');
+        el.innerHTML = `
+        <div style="
+            width: 44px; height: 44px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            border: 3px solid rgba(255,255,255,0.8);
+            box-shadow: 0 0 20px rgba(16,185,129,0.8), 0 0 40px rgba(16,185,129,0.4);
+            display: flex; align-items: center; justify-content: center;
+        ">
+            <span style="transform: rotate(45deg); font-size: 20px;">🚌</span>
+        </div>`;
+        el.style.cssText = 'cursor: pointer; width: 44px; height: 44px;';
+        return el;
+    }
+
+    function buildPopupContent3D(lat, lng, accuracy, altitude) {
         const u = currentUser;
         const time = new Date().toLocaleTimeString('en-MY', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        const altStr = altitude ? `${Math.round(altitude)}m` : 'N/A';
         return `
         <div class="popup-inner">
             <div class="popup-header">
@@ -839,19 +1199,7 @@
             </div>
             <div class="popup-row">
                 <span class="popup-row-label">Status</span>
-                <span><span class="popup-status active">● ACTIVE</span></span>
-            </div>
-            <div class="popup-row">
-                <span class="popup-row-label">Driver ID</span>
-                <span class="popup-row-value">${u.id}</span>
-            </div>
-            <div class="popup-row">
-                <span class="popup-row-label">Bus ID</span>
-                <span class="popup-row-value">${u.busId}</span>
-            </div>
-            <div class="popup-row">
-                <span class="popup-row-label">Route</span>
-                <span class="popup-row-value">${u.route}</span>
+                <span><span class="popup-status active">● ACTIVE 3D</span></span>
             </div>
             <div class="popup-row">
                 <span class="popup-row-label">X (Longitude)</span>
@@ -862,83 +1210,88 @@
                 <span class="popup-row-value">${lat.toFixed(6)}</span>
             </div>
             <div class="popup-row">
-                <span class="popup-row-label">Shift</span>
-                <span class="popup-row-value">Morning</span>
+                <span class="popup-row-label">Z (Altitude)</span>
+                <span class="popup-row-value">${altStr}</span>
+            </div>
+            <div class="popup-row">
+                <span class="popup-row-label">Driver</span>
+                <span class="popup-row-value">${u.id}</span>
+            </div>
+            <div class="popup-row">
+                <span class="popup-row-label">Route</span>
+                <span class="popup-row-value">${u.route}</span>
             </div>
             <div class="popup-accuracy">
-                📡 GPS Accuracy: ±${Math.round(accuracy)}m &nbsp;|&nbsp; Updated: ${time}
+                📡 GPS: ±${Math.round(accuracy)}m &nbsp;|&nbsp; 🕐 ${time}
             </div>
         </div>`;
     }
 
-    // ─── INIT MAP ────────────────────────────────────────────────────
-    function initMap() {
-        map = L.map('map', { zoomControl: true }).setView([4.5971, 101.0901], 15);
-
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors',
-            maxZoom: 19
-        }).addTo(map);
-
-        // Start real GPS tracking
-        startGPSTracking();
-    }
-
-    // ─── REAL GPS TRACKING ───────────────────────────────────────────
+    // ─── GPS TRACKING ────────────────────────────────────────────────
     function startGPSTracking() {
         if (!navigator.geolocation) {
             setGPSStatus('error', '❌ GPS Not Supported');
             return;
         }
-
         setGPSStatus('acquiring', '⏳ Acquiring Signal...');
+        currentRouteSession = { points: [], startTime: new Date().toISOString(), endTime: null,
+            driver: currentUser ? currentUser.id : 'Unknown',
+            bus: currentUser ? currentUser.busId : 'Unknown',
+            route: currentUser ? currentUser.route : 'Unknown', id: Date.now() };
 
         watchId = navigator.geolocation.watchPosition(
             function(position) {
                 if (isTrackingPaused) return;
-
                 const lat = position.coords.latitude;
                 const lng = position.coords.longitude;
                 const accuracy = position.coords.accuracy;
+                const altitude = position.coords.altitude;
                 const time = new Date(position.timestamp);
 
                 currentLat = lat;
                 currentLng = lng;
+                currentRouteSession.points.push({ lat: lat, lng: lng,
+                    alt: position.coords.altitude || null,
+                    accuracy: Math.round(accuracy),
+                    timestamp: new Date().toISOString(),
+                    time: new Date().toLocaleTimeString('en-MY') });
 
-                // Update sidebar displays
                 document.getElementById('dispLat').textContent = lat.toFixed(6);
                 document.getElementById('dispLng').textContent = lng.toFixed(6);
                 document.getElementById('dispAccuracy').textContent = '±' + Math.round(accuracy) + ' m';
+                document.getElementById('dispAltitude').textContent = altitude ? Math.round(altitude) + ' m' : '—';
                 document.getElementById('dispTime').textContent = time.toLocaleTimeString('en-MY');
 
-                setGPSStatus('live', '🟢 Live GPS Active');
+                setGPSStatus('live', '🟢 Live 3D GPS');
 
-                const popupContent = buildPopupContent(lat, lng, accuracy);
+                if (!map3d) return;
 
-                // Update or create marker
-                if (!marker) {
-                    marker = L.marker([lat, lng], { icon: getBusIcon('active') })
-                        .addTo(map)
-                        .bindPopup(popupContent, { maxWidth: 280, className: 'custom-popup' });
+                // Add to route trail
+                routeCoords.push([lng, lat]);
+                if (routeCoords.length > 500) routeCoords.shift();
+                addRouteLayer();
 
-                    map.setView([lat, lng], 17);
+                const popupHTML = buildPopupContent3D(lat, lng, accuracy, altitude);
+
+                if (!busMarker3d) {
+                    busMarkerEl = createBusMarkerElement();
+                    busMarker3d = new mapboxgl.Marker({ element: busMarkerEl, anchor: 'bottom' })
+                        .setLngLat([lng, lat])
+                        .setPopup(new mapboxgl.Popup({ offset: 25 }).setHTML(popupHTML))
+                        .addTo(map3d);
+
+                    // Fly to location with 3D animation
+                    map3d.flyTo({
+                        center: [lng, lat],
+                        zoom: 17,
+                        pitch: 60,
+                        bearing: -20,
+                        duration: 2000,
+                        essential: true
+                    });
                 } else {
-                    marker.setLatLng([lat, lng]);
-                    marker.setPopupContent(popupContent);
-                }
-
-                // Accuracy circle
-                if (accuracyCircle) {
-                    accuracyCircle.setLatLng([lat, lng]).setRadius(accuracy);
-                } else {
-                    accuracyCircle = L.circle([lat, lng], {
-                        radius: accuracy,
-                        color: '#10b981',
-                        fillColor: '#10b981',
-                        fillOpacity: 0.08,
-                        weight: 1.5,
-                        dashArray: '5, 5'
-                    }).addTo(map);
+                    busMarker3d.setLngLat([lng, lat]);
+                    busMarker3d.getPopup().setHTML(popupHTML);
                 }
             },
             function(error) {
@@ -947,13 +1300,8 @@
                 else if (error.code === 2) msg = '❌ Position Unavailable';
                 else if (error.code === 3) msg = '❌ Request Timeout';
                 setGPSStatus('error', msg);
-                console.warn('GPS Error:', error.message);
             },
-            {
-                enableHighAccuracy: true,
-                timeout: 15000,
-                maximumAge: 0
-            }
+            { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
         );
     }
 
@@ -964,9 +1312,16 @@
     }
 
     function centerOnMe() {
+        if (!map3d) { alert('Map not initialized yet. Please add your Mapbox token.'); return; }
         if (currentLat && currentLng) {
-            map.setView([currentLat, currentLng], 18);
-            if (marker) marker.openPopup();
+            map3d.flyTo({
+                center: [currentLng, currentLat],
+                zoom: 18,
+                pitch: 60,
+                bearing: -20,
+                duration: 1500
+            });
+            if (busMarker3d) busMarker3d.togglePopup();
         } else {
             alert('GPS location not yet acquired. Please wait...');
         }
@@ -978,18 +1333,34 @@
         if (isTrackingPaused) {
             btn.textContent = '▶ Resume Tracking';
             setGPSStatus('acquiring', '⏸ Tracking Paused');
+            saveCurrentRoute();
+            updateRouteHistoryList();
         } else {
             btn.textContent = '⏸ Pause Tracking';
-            setGPSStatus('live', '🟢 Live GPS Active');
+            setGPSStatus('live', '🟢 Live 3D GPS');
+            currentRouteSession = { points: [], startTime: new Date().toISOString(), endTime: null,
+                driver: currentUser.id, bus: currentUser.busId, route: currentUser.route, id: Date.now() };
         }
+    }
+
+    function setMapStyle(style) {
+        if (!map3d || !mapboxToken) return;
+        currentMapStyle = style;
+        map3d.setStyle(mapStyles[style]);
+        // Re-add layers after style change
+        map3d.once('style.load', () => {
+            add3DBuildings();
+            addTerrainLayer();
+            routeLayerAdded = false;
+            if (routeCoords.length > 1) addRouteLayer();
+        });
     }
 
     // ─── CHARTS ──────────────────────────────────────────────────────
     const chartConfig = {
         type: 'line',
         options: {
-            responsive: true,
-            maintainAspectRatio: false,
+            responsive: true, maintainAspectRatio: false,
             plugins: { legend: { display: false } },
             scales: {
                 y: { beginAtZero: true, min: 0, max: 100, ticks: { color: '#64748b', font: { size: 9 } }, grid: { color: 'rgba(255,255,255,0.05)' } },
@@ -1011,10 +1382,7 @@
         });
         historyChart = new Chart(document.getElementById('historyChart'), {
             type: 'bar',
-            data: {
-                labels: [],
-                datasets: [{ label: 'Avg Attention %', data: [], backgroundColor: 'rgba(16,185,129,0.5)', borderColor: '#10b981', borderWidth: 2 }]
-            },
+            data: { labels: [], datasets: [{ label: 'Avg Attention %', data: [], backgroundColor: 'rgba(16,185,129,0.5)', borderColor: '#10b981', borderWidth: 2 }] },
             options: {
                 responsive: true, maintainAspectRatio: false,
                 scales: {
@@ -1069,9 +1437,7 @@
         const now = new Date().toLocaleTimeString();
         attentionData.push({ time: now, value: attention });
         fatigueData.push({ time: now, value: fatigue });
-        if (currentSession) {
-            currentSession.data.push({ timestamp: new Date(), attention, fatigue });
-        }
+        if (currentSession) currentSession.data.push({ timestamp: new Date(), attention, fatigue });
         if (attentionData.length > 25) attentionData.shift();
         if (fatigueData.length > 25) fatigueData.shift();
         attentionChart.data.labels = attentionData.map(d => d.time);
@@ -1276,11 +1642,13 @@
         document.getElementById('systemStatus').style.color = '#ef4444';
     }
 
-    function saveSessions() { localStorage.setItem('driverSessions_' + currentUser.id, JSON.stringify(allSessions)); }
+    function saveSessions() { try { localStorage.setItem('driverSessions_' + currentUser.id, JSON.stringify(allSessions)); } catch(e) {} }
 
     function loadSessions() {
-        const saved = localStorage.getItem('driverSessions_' + currentUser.id);
-        if (saved) { allSessions = JSON.parse(saved); updateSessionsList(); updateAnalytics(); }
+        try {
+            const saved = localStorage.getItem('driverSessions_' + currentUser.id);
+            if (saved) { allSessions = JSON.parse(saved); updateSessionsList(); updateAnalytics(); }
+        } catch(e) {}
     }
 
     function updateSessionsList() {
@@ -1375,6 +1743,198 @@
     }
 
     window.FACEMESH_TESSELATION = [[127,34],[34,139],[139,127],[11,0],[0,37],[37,11],[232,231],[231,120],[120,232],[72,37],[37,39],[39,72],[128,121],[121,47],[47,128],[232,121],[121,128],[128,232],[104,69],[69,67],[67,104],[175,171],[171,148],[148,175],[118,50],[50,101],[101,118],[73,39],[39,40],[40,73],[9,151],[151,108],[108,9],[48,115],[115,131],[131,48],[194,204],[204,211],[211,194],[74,40],[40,185],[185,74],[80,42],[42,183],[183,80],[40,92],[92,186],[186,40],[230,229],[229,118],[118,230],[202,212],[212,214],[214,202],[83,18],[18,17],[17,83],[76,61],[61,146],[146,76],[160,29],[29,30],[30,160],[56,157],[157,173],[173,56],[106,204],[204,194],[194,106],[135,214],[214,192],[192,135],[203,165],[165,98],[98,203],[21,71],[71,68],[68,21],[51,45],[45,4],[4,51],[144,24],[24,23],[23,144],[77,146],[146,91],[91,77],[205,50],[50,187],[187,205],[201,200],[200,18],[18,201],[91,106],[106,182],[182,91],[90,91],[91,181],[181,90],[85,84],[84,17],[17,85],[206,203],[203,36],[36,206],[148,171],[171,140],[140,148],[92,40],[40,39],[39,92],[193,189],[189,244],[244,193],[159,158],[158,28],[28,159],[247,246],[246,161],[161,247],[236,3],[3,196],[196,236],[54,68],[68,104],[104,54],[193,168],[168,8],[8,193],[117,228],[228,31],[31,117],[189,193],[193,55],[55,189],[98,97],[97,99],[99,98],[126,47],[47,100],[100,126],[166,79],[79,218],[218,166],[155,154],[154,26],[26,155],[209,49],[49,131],[131,209],[135,136],[136,150],[150,135],[47,126],[126,217],[217,47],[223,52],[52,53],[53,223],[45,51],[51,134],[134,45],[211,170],[170,140],[140,211],[67,69],[69,108],[108,67],[43,106],[106,91],[91,43],[230,119],[119,120],[120,230],[226,130],[130,247],[247,226],[63,53],[53,52],[52,63],[238,20],[20,242],[242,238],[46,70],[70,156],[156,46],[78,62],[62,96],[96,78],[46,53],[53,63],[63,46],[143,34],[34,227],[227,143],[123,117],[117,111],[111,123],[44,125],[125,19],[19,44],[236,134],[134,51],[51,236],[216,206],[206,205],[205,216],[154,153],[153,22],[22,154],[39,37],[37,167],[167,39],[200,201],[201,208],[208,200],[36,142],[142,100],[100,36],[57,212],[212,202],[202,57],[20,60],[60,99],[99,20],[28,158],[158,157],[157,28],[35,226],[226,113],[113,35],[160,159],[159,27],[27,160],[204,202],[202,210],[210,204],[113,225],[225,46],[46,113],[43,202],[202,204],[204,43],[62,76],[76,77],[77,62],[137,123],[123,116],[116,137],[41,38],[38,72],[72,41],[203,129],[129,142],[142,203],[64,98],[98,240],[240,64],[49,102],[102,64],[64,49],[41,73],[73,74],[74,41],[212,216],[216,207],[207,212],[42,74],[74,184],[184,42],[169,170],[170,211],[211,169],[170,149],[149,176],[176,170],[105,66],[66,69],[69,105],[122,6],[6,168],[168,122],[123,147],[147,187],[187,123],[96,77],[77,90],[90,96],[65,55],[55,107],[107,65],[89,90],[90,180],[180,89],[101,100],[100,120],[120,101],[63,105],[105,104],[104,63],[93,137],[137,227],[227,93],[15,86],[86,85],[85,15],[129,102],[102,49],[49,129],[14,87],[87,86],[86,14],[55,8],[8,9],[9,55],[100,47],[47,121],[121,100],[145,23],[23,22],[22,145],[88,89],[89,179],[179,88],[6,122],[122,196],[196,6],[88,95],[95,96],[96,88],[138,172],[172,136],[136,138],[215,58],[58,172],[172,215],[115,48],[48,219],[219,115],[42,80],[80,81],[81,42],[195,3],[3,51],[51,195],[43,146],[146,61],[61,43],[171,175],[175,199],[199,171],[81,82],[82,38],[38,81],[53,46],[46,225],[225,53],[144,163],[163,110],[110,144],[52,65],[65,66],[66,52],[229,228],[228,117],[117,229],[34,127],[127,234],[234,34],[107,108],[108,69],[69,107],[109,108],[108,151],[151,109],[48,64],[64,235],[235,48],[62,78],[78,191],[191,62],[129,209],[209,126],[126,129],[111,35],[35,143],[143,111],[117,123],[123,50],[50,117],[222,65],[65,52],[52,222],[19,125],[125,141],[141,19],[221,55],[55,65],[65,221],[3,195],[195,197],[197,3],[25,7],[7,33],[33,25],[220,237],[237,44],[44,220],[70,71],[71,139],[139,70],[122,193],[193,245],[245,122],[247,30],[30,225],[225,247],[238,79],[79,20],[20,238],[166,59],[59,75],[75,166],[60,75],[75,240],[240,60],[147,177],[177,215],[215,147],[20,79],[79,166],[166,20],[187,147],[147,213],[213,187],[112,233],[233,244],[244,112],[233,128],[128,245],[245,233],[128,114],[114,188],[188,128],[114,217],[217,174],[174,114],[131,115],[115,220],[220,131],[217,198],[198,236],[236,217],[198,131],[131,134],[134,198],[177,132],[132,58],[58,177],[143,35],[35,124],[124,143],[110,163],[163,7],[7,110],[228,110],[110,25],[25,228],[356,389],[389,368],[368,356],[11,302],[302,267],[267,11],[452,350],[350,349],[349,452],[302,303],[303,269],[269,302],[357,343],[343,277],[277,357],[452,453],[453,357],[357,452],[333,332],[332,297],[297,333],[175,152],[152,377],[377,175],[347,348],[348,330],[330,347],[303,304],[304,270],[270,303],[9,336],[336,337],[337,9],[278,279],[279,360],[360,278],[418,262],[262,431],[431,418],[304,408],[408,409],[409,304],[310,415],[415,407],[407,310],[270,409],[409,410],[410,270],[450,348],[348,347],[347,450],[422,430],[430,434],[434,422],[313,314],[314,17],[17,313],[306,307],[307,375],[375,306],[387,388],[388,260],[260,387],[286,414],[414,398],[398,286],[335,406],[406,418],[418,335],[364,367],[367,416],[416,364],[423,358],[358,327],[327,423],[251,284],[284,298],[298,251],[281,5],[5,4],[4,281],[373,374],[374,253],[253,373],[307,320],[320,321],[321,307],[425,427],[427,411],[411,425],[421,313],[313,18],[18,421],[321,405],[405,406],[406,321],[320,404],[404,405],[405,320],[315,16],[16,17],[17,315],[426,425],[425,266],[266,426],[377,400],[400,369],[369,377],[322,391],[391,269],[269,322],[417,465],[465,464],[464,417],[386,257],[257,258],[258,386],[466,260],[260,388],[388,466],[456,399],[399,419],[419,456],[284,332],[332,333],[333,284],[417,285],[285,8],[8,417],[346,340],[340,261],[261,346],[413,441],[441,285],[285,413],[327,460],[460,328],[328,327],[355,371],[371,329],[329,355],[392,439],[439,438],[438,392],[382,341],[341,256],[256,382],[429,420],[420,360],[360,429],[364,394],[394,379],[379,364],[277,343],[343,437],[437,277],[443,444],[444,283],[283,443],[275,440],[440,363],[363,275],[431,262],[262,369],[369,431],[297,338],[338,337],[337,297],[273,375],[375,321],[321,273],[450,451],[451,349],[349,450],[446,342],[342,467],[467,446],[293,334],[334,282],[282,293],[458,461],[461,462],[462,458],[276,353],[353,383],[383,276],[308,324],[324,325],[325,308],[276,300],[300,293],[293,276],[372,345],[345,447],[447,372],[352,345],[345,340],[340,352],[274,1],[1,19],[19,274],[456,248],[248,281],[281,456],[436,427],[427,425],[425,436],[381,256],[256,252],[252,381],[269,391],[391,393],[393,269],[200,199],[199,428],[428,200],[266,330],[330,329],[329,266],[287,273],[273,422],[422,287],[250,462],[462,328],[328,250],[258,286],[286,384],[384,258],[265,353],[353,342],[342,265],[387,259],[259,257],[257,387],[424,431],[431,430],[430,424],[342,353],[353,276],[276,342],[273,335],[335,424],[424,273],[292,325],[325,307],[307,292],[366,447],[447,345],[345,366],[271,303],[303,302],[302,271],[423,266],[266,371],[371,423],[294,455],[455,460],[460,294],[279,278],[278,294],[294,279],[271,272],[272,304],[304,271],[432,434],[434,427],[427,432],[272,407],[407,408],[408,272],[394,430],[430,431],[431,394],[395,369],[369,400],[400,395],[334,333],[333,299],[299,334],[351,417],[417,168],[168,351],[352,280],[280,411],[411,352],[325,319],[319,320],[320,325],[295,296],[296,336],[336,295],[319,403],[403,404],[404,319],[330,348],[348,349],[349,330],[293,298],[298,333],[333,293],[323,454],[454,447],[447,323],[15,16],[16,315],[315,15],[358,429],[429,279],[279,358],[14,15],[15,316],[316,14],[285,336],[336,9],[9,285],[329,349],[349,350],[350,329],[374,380],[380,252],[252,374],[318,402],[402,403],[403,318],[6,197],[197,419],[419,6],[318,319],[319,325],[325,318],[367,364],[364,365],[365,367],[435,367],[367,397],[397,435],[344,438],[438,439],[439,344],[272,271],[271,311],[311,272],[195,5],[5,281],[281,195],[273,287],[287,291],[291,273],[396,428],[428,199],[199,396],[311,271],[271,268],[268,311],[283,444],[444,445],[445,283],[373,254],[254,339],[339,373],[282,334],[334,296],[296,282],[449,347],[347,346],[346,449],[264,447],[447,454],[454,264],[336,296],[296,299],[299,336],[338,10],[10,151],[151,338],[278,439],[439,455],[455,278],[292,407],[407,415],[415,292],[358,371],[371,355],[355,358],[340,345],[345,372],[372,340],[346,347],[347,280],[280,346],[442,443],[443,282],[282,442],[19,94],[94,370],[370,19],[441,442],[442,295],[295,441],[248,419],[419,197],[197,248],[263,255],[255,359],[359,263],[440,275],[275,274],[274,440],[300,383],[383,368],[368,300],[351,412],[412,465],[465,351],[263,467],[467,466],[466,263],[301,368],[368,389],[389,301],[395,378],[378,379],[379,395],[412,351],[351,419],[419,412],[436,426],[426,322],[322,436],[2,326],[326,370],[370,2],[305,460],[460,455],[455,305],[254,449],[449,448],[448,254],[255,261],[261,446],[446,255],[253,450],[450,449],[449,253],[252,451],[451,450],[450,252],[256,452],[452,451],[451,256],[341,453],[453,452],[452,341],[413,464],[464,463],[463,413],[441,413],[413,414],[414,441],[258,442],[442,441],[441,258],[257,443],[443,442],[442,257],[259,444],[444,443],[443,259],[260,445],[445,444],[444,260],[467,342],[342,445],[445,467],[459,458],[458,250],[250,459],[289,392],[392,290],[290,289],[290,328],[328,460],[460,290],[376,433],[433,435],[435,376],[250,290],[290,392],[392,250],[411,427],[427,434],[434,411],[461,304],[304,271],[271,461]];
+
+    // ─── ROUTE HISTORY ────────────────────────────────────────────────────
+
+    function saveCurrentRoute() {
+        if (!currentRouteSession || currentRouteSession.points.length < 2) return;
+        currentRouteSession.endTime = new Date().toISOString();
+        allRoutes.push(JSON.parse(JSON.stringify(currentRouteSession)));
+        try { localStorage.setItem('driverRoutes', JSON.stringify(allRoutes)); } catch(e) {}
+        currentRouteSession = { points: [], startTime: null, driver: null, bus: null, route: null, id: null };
+    }
+
+    function loadRoutes() {
+        try {
+            const saved = localStorage.getItem('driverRoutes');
+            if (saved) {
+                allRoutes = JSON.parse(saved);
+                updateRouteHistoryList();
+            } else {
+                fetchDemoRoutes();
+            }
+        } catch(e) { fetchDemoRoutes(); }
+    }
+
+    async function fetchDemoRoutes() {
+        const el = document.getElementById('routeHistoryList');
+        if (el) el.innerHTML = '<div style="text-align:center; color:#a78bfa; padding:20px; font-size:12px;">⏳ Loading demo routes from Mapbox...</div>';
+
+        const trips = [
+            { bus:'BUS-17B-001', driver:'DRV-2024-0187', route:'Route 17B', daysAgo:2, start:'101.4432,3.0449', end:'101.6070,3.0519' },
+            { bus:'BUS-12A-003', driver:'DRV-2024-0092', route:'Route 12A', daysAgo:1, start:'101.4489,3.0512', end:'101.5551,3.0786' },
+            { bus:'BUS-08C-005', driver:'DRV-2024-0187', route:'Route 08C', daysAgo:0, start:'101.4389,3.0598', end:'101.5738,3.0821' }
+        ];
+
+        const results = [];
+        for (const t of trips) {
+            try {
+                const url = 'https://api.mapbox.com/directions/v5/mapbox/driving/' + t.start + ';' + t.end + '?geometries=geojson&overview=full&access_token=' + mapboxToken;
+                const res = await fetch(url);
+                const data = await res.json();
+                const coords = data.routes[0].geometry.coordinates;
+                const base = new Date();
+                base.setDate(base.getDate() - t.daysAgo);
+                base.setHours(7, 30, 0, 0);
+                const points = coords.map((c, i) => {
+                    const ts = new Date(base.getTime() + i * 10000);
+                    return { lng: c[0], lat: c[1], alt: null,
+                        accuracy: Math.floor(4 + Math.random() * 8),
+                        timestamp: ts.toISOString(),
+                        time: ts.toLocaleTimeString('en-MY') };
+                });
+                results.push({ id: Date.now() + results.length,
+                    driver: t.driver, bus: t.bus, route: t.route,
+                    startTime: base.toISOString(),
+                    endTime: new Date(base.getTime() + coords.length * 10000).toISOString(),
+                    points: points });
+            } catch(e) { console.warn('Route fetch failed:', t.bus, e); }
+        }
+
+        if (results.length > 0) {
+            allRoutes = results;
+            try { localStorage.setItem('driverRoutes', JSON.stringify(allRoutes)); } catch(e) {}
+        }
+        updateRouteHistoryList();
+    }
+
+    function updateRouteHistoryList() {
+        const container = document.getElementById('routeHistoryList');
+        if (!container) return;
+        if (allRoutes.length === 0) {
+            container.innerHTML = '<div style="text-align:center; color:#64748b; padding:20px; font-size:12px;">No saved routes yet</div>';
+            return;
+        }
+        container.innerHTML = [...allRoutes].reverse().map((r, i) => {
+            const realIndex = allRoutes.length - 1 - i;
+            const date = new Date(r.startTime).toLocaleDateString('en-MY');
+            const time = new Date(r.startTime).toLocaleTimeString('en-MY', {hour:'2-digit', minute:'2-digit'});
+            const sel = selectedRouteIndex === realIndex;
+            return '<div onclick="selectRoute(' + realIndex + ')" style="' +
+                'background:' + (sel ? 'rgba(16,185,129,0.15)' : 'rgba(0,0,0,0.3)') + ';' +
+                'border:1px solid ' + (sel ? '#10b981' : 'rgba(124,58,237,0.2)') + ';' +
+                'border-radius:8px; padding:10px; margin-bottom:8px; cursor:pointer;">' +
+                '<div style="display:flex; justify-content:space-between; margin-bottom:4px;">' +
+                '<span style="font-weight:700; font-size:12px; color:' + (sel ? '#10b981' : '#a78bfa') + ';">' + r.bus + ' — ' + r.route + '</span>' +
+                '<span style="font-size:9px; background:rgba(124,58,237,0.2); padding:2px 6px; border-radius:10px;">' + r.points.length + ' pts</span>' +
+                '</div>' +
+                '<div style="font-size:10px; color:#64748b;">' + date + ' ' + time + '</div>' +
+                '<div style="font-size:10px; color:#94a3b8;">Driver: ' + r.driver + '</div></div>';
+        }).join('');
+    }
+
+    function selectRoute(index) {
+        selectedRouteIndex = index;
+        updateRouteHistoryList();
+        showRouteStats(allRoutes[index]);
+        displayRouteOnHistoryMap(allRoutes[index]);
+    }
+
+    function showRouteStats(route) {
+        const container = document.getElementById('routeStats');
+        if (!container || !route) return;
+        const pts = route.points;
+        const duration = route.endTime ? Math.round((new Date(route.endTime) - new Date(route.startTime)) / 60000) : '—';
+        let distKm = 0;
+        for (let i = 1; i < pts.length; i++) {
+            const R = 6371, dLat = (pts[i].lat - pts[i-1].lat) * Math.PI/180, dLng = (pts[i].lng - pts[i-1].lng) * Math.PI/180;
+            const a = Math.sin(dLat/2)**2 + Math.cos(pts[i-1].lat*Math.PI/180) * Math.cos(pts[i].lat*Math.PI/180) * Math.sin(dLng/2)**2;
+            distKm += R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        }
+        container.innerHTML =
+            '<div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">' +
+            '<div style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); border-radius:8px; padding:10px; text-align:center;"><div style="font-size:20px; font-weight:900; color:#10b981;">' + pts.length + '</div><div style="font-size:9px; color:#64748b;">GPS POINTS</div></div>' +
+            '<div style="background:rgba(124,58,237,0.1); border:1px solid rgba(124,58,237,0.3); border-radius:8px; padding:10px; text-align:center;"><div style="font-size:20px; font-weight:900; color:#a78bfa;">' + duration + 'm</div><div style="font-size:9px; color:#64748b;">DURATION</div></div>' +
+            '<div style="background:rgba(59,130,246,0.1); border:1px solid rgba(59,130,246,0.3); border-radius:8px; padding:10px; text-align:center;"><div style="font-size:20px; font-weight:900; color:#3b82f6;">' + distKm.toFixed(2) + '</div><div style="font-size:9px; color:#64748b;">KM</div></div>' +
+            '<div style="background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.3); border-radius:8px; padding:10px; text-align:center;"><div style="font-size:20px; font-weight:900; color:#f59e0b;">' + (pts[0] ? pts[0].accuracy : '—') + 'm</div><div style="font-size:9px; color:#64748b;">ACCURACY</div></div>' +
+            '</div>';
+    }
+
+    function displayRouteOnHistoryMap(route) {
+        document.getElementById('historyMapPlaceholder').style.display = 'none';
+        if (!historyMap) {
+            mapboxgl.accessToken = mapboxToken;
+            historyMap = new mapboxgl.Map({ container: 'historyMap', style: mapStyles.dark,
+                center: [route.points[0].lng, route.points[0].lat], zoom: 13, pitch: 45, bearing: -20, antialias: true });
+            historyMap.addControl(new mapboxgl.NavigationControl(), 'top-right');
+            historyMap.on('load', () => { historyMapInitialized = true; renderHistoryRoute(route); });
+        } else {
+            if (historyMapInitialized) renderHistoryRoute(route);
+        }
+    }
+
+    function renderHistoryRoute(route) {
+        if (!historyMap || !historyMapInitialized) return;
+        const coords = route.points.map(p => [p.lng, p.lat]);
+        ['hist-route','hist-glow'].forEach(id => { try { if (historyMap.getLayer(id)) historyMap.removeLayer(id); } catch(e){} });
+        try { if (historyMap.getSource('hist-src')) historyMap.removeSource('hist-src'); } catch(e){}
+        historyMap.addSource('hist-src', { type:'geojson', data:{ type:'Feature', geometry:{ type:'LineString', coordinates:coords }}});
+        historyMap.addLayer({ id:'hist-glow', type:'line', source:'hist-src', paint:{ 'line-color':'#a78bfa','line-width':12,'line-opacity':0.2,'line-blur':4 }});
+        historyMap.addLayer({ id:'hist-route', type:'line', source:'hist-src', layout:{ 'line-join':'round','line-cap':'round' }, paint:{ 'line-color':'#a78bfa','line-width':4,'line-opacity':0.9 }});
+        const sEl = document.createElement('div');
+        sEl.innerHTML = '<div style="background:#10b981;width:14px;height:14px;border-radius:50%;border:3px solid white;box-shadow:0 0 10px #10b981;"></div>';
+        new mapboxgl.Marker({element:sEl}).setLngLat(coords[0]).addTo(historyMap);
+        const eEl = document.createElement('div');
+        eEl.innerHTML = '<div style="background:#ef4444;width:14px;height:14px;border-radius:50%;border:3px solid white;box-shadow:0 0 10px #ef4444;"></div>';
+        new mapboxgl.Marker({element:eEl}).setLngLat(coords[coords.length-1]).addTo(historyMap);
+        const lngs = coords.map(c=>c[0]), lats = coords.map(c=>c[1]);
+        historyMap.fitBounds([[Math.min(...lngs)-0.005,Math.min(...lats)-0.005],[Math.max(...lngs)+0.005,Math.max(...lats)+0.005]], {padding:50, pitch:45});
+    }
+
+    function exportRoute(format) {
+        if (selectedRouteIndex === null) { alert('Please select a route first!'); return; }
+        const route = allRoutes[selectedRouteIndex];
+        const pts = route.points;
+        const fname = 'route_' + route.bus + '_' + new Date(route.startTime).toISOString().slice(0,10);
+        if (format === 'geojson') {
+            const gj = { type:'FeatureCollection', features:[
+                { type:'Feature', properties:{ driver:route.driver, bus:route.bus, route:route.route, startTime:route.startTime, points:pts.length },
+                  geometry:{ type:'LineString', coordinates:pts.map(p=>[p.lng,p.lat]) }},
+                ...pts.map((p,i) => ({ type:'Feature', properties:{ seq:i+1, time:p.time, accuracy:p.accuracy }, geometry:{ type:'Point', coordinates:[p.lng,p.lat] }}))
+            ]};
+            downloadFile(JSON.stringify(gj,null,2), fname+'.geojson', 'application/json');
+        } else if (format === 'csv') {
+            const rows = pts.map((p,i) => i+1+','+p.lat+','+p.lng+','+(p.alt||'')+','+p.accuracy+','+p.time+','+p.timestamp+','+route.driver+','+route.bus+','+route.route);
+            downloadFile(['seq,latitude,longitude,altitude,accuracy,time,timestamp,driver,bus,route',...rows].join('\n'), fname+'.csv', 'text/csv');
+        } else if (format === 'kml') {
+            const coords = pts.map(p => p.lng+','+p.lat+',0').join('\n');
+            const kml = '<?xml version="1.0" encoding="UTF-8"?>\n<kml xmlns="http://www.opengis.net/kml/2.2"><Document>\n<n>' + route.bus + '</n>\n<Placemark><n>' + route.bus + ' Route</n>\n<LineString><coordinates>' + coords + '</coordinates></LineString>\n</Placemark>\n</Document></kml>';
+            downloadFile(kml, fname+'.kml', 'application/vnd.google-earth.kml+xml');
+        } else if (format === 'gpx') {
+            const trkpts = pts.map(p => '<trkpt lat="'+p.lat+'" lon="'+p.lng+'"><time>'+p.timestamp+'</time></trkpt>').join('\n');
+            const gpx = '<?xml version="1.0" encoding="UTF-8"?>\n<gpx version="1.1" creator="Driver Monitoring Pro">\n<trk><n>' + route.bus + '</n><trkseg>\n' + trkpts + '\n</trkseg></trk>\n</gpx>';
+            downloadFile(gpx, fname+'.gpx', 'application/gpx+xml');
+        } else if (format === 'json') {
+            downloadFile(JSON.stringify(route,null,2), fname+'.json', 'application/json');
+        }
+    }
+
+    function downloadFile(content, filename, mimeType) {
+        const blob = new Blob([content], {type:mimeType});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href=url; a.download=filename; a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    function clearAllRoutes() {
+        if (!confirm('Delete ALL saved routes? Cannot be undone!')) return;
+        allRoutes = []; selectedRouteIndex = null;
+        localStorage.removeItem('driverRoutes');
+        updateRouteHistoryList();
+        document.getElementById('routeStats').innerHTML = '<div style="text-align:center; color:#64748b; font-size:11px; padding:10px;">Select a route to view stats</div>';
+        document.getElementById('historyMapPlaceholder').style.display = 'block';
+    }
+
 </script>
 </body>
 </html>
