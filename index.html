@@ -147,6 +147,66 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--txt);font
   background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.12);
   border-radius:7px;padding:7px 10px;text-align:center;letter-spacing:.3px}
 
+/* ── DRIVER INFO SECTION ── */
+#drvSection {
+  padding:9px 13px 10px;border-top:1px solid var(--bdr);flex-shrink:0;display:none;
+}
+.drv-hdr {
+  font-size:9px;font-weight:700;color:var(--muted);letter-spacing:1.5px;
+  text-transform:uppercase;margin-bottom:7px;display:flex;align-items:center;gap:5px;
+}
+.drv-avatar {
+  width:34px;height:34px;border-radius:50%;background:rgba(0,212,255,.12);
+  border:1.5px solid rgba(0,212,255,.3);display:flex;align-items:center;
+  justify-content:center;font-size:15px;flex-shrink:0;
+}
+.drv-top {display:flex;align-items:center;gap:9px;margin-bottom:8px;}
+.drv-name {font-size:11px;font-weight:700;color:var(--txt);line-height:1.3;}
+.drv-meta {font-size:9px;color:var(--muted);margin-top:1px;font-family:var(--M);}
+.drv-row {
+  display:flex;justify-content:space-between;align-items:center;
+  padding:3px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:9.5px;
+}
+.drv-row:last-child{border:none;}
+.drv-k{color:var(--muted);}
+.drv-v{font-family:var(--M);color:var(--txt);font-size:9.5px;text-align:right;}
+.drv-v.ok{color:var(--green)}.drv-v.warn{color:var(--amber)}.drv-v.bad{color:var(--red)}
+.drv-pills{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap;}
+.drv-pill{
+  font-family:var(--M);font-size:8px;font-weight:700;letter-spacing:.4px;
+  padding:2px 7px;border-radius:8px;background:rgba(0,212,255,.1);
+  color:var(--cyan);border:1px solid rgba(0,212,255,.2);
+}
+
+/* ── OFFENCES SECTION ── */
+.offence-hdr{
+  font-size:9px;font-weight:700;color:var(--muted);letter-spacing:1.5px;
+  text-transform:uppercase;margin-bottom:6px;margin-top:10px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.offence-clean{
+  font-size:9px;font-family:var(--M);color:var(--green);
+  background:rgba(0,255,136,.08);border:1px solid rgba(0,255,136,.2);
+  border-radius:6px;padding:5px 8px;text-align:center;
+}
+.offence-item{
+  background:rgba(0,0,0,.3);border:1px solid rgba(255,68,85,.15);
+  border-left:2px solid var(--red);border-radius:6px;
+  padding:6px 8px;margin-bottom:4px;
+}
+.offence-type{font-size:9.5px;color:var(--txt);font-weight:600;line-height:1.3;margin-bottom:3px;}
+.offence-meta{display:flex;justify-content:space-between;align-items:center;}
+.offence-date{font-size:8px;color:var(--muted);font-family:var(--M);}
+.offence-fine{font-size:9px;font-weight:700;color:var(--red);font-family:var(--M);}
+.offence-total{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:4px 8px;margin-top:2px;
+  background:rgba(255,68,85,.07);border:1px solid rgba(255,68,85,.2);
+  border-radius:6px;font-size:9px;font-family:var(--M);
+}
+.offence-total-lbl{color:var(--muted);}
+.offence-total-val{color:var(--red);font-weight:700;}
+
 /* minimise mapbox attribution */
 .mapboxgl-ctrl-attrib-inner, .mapboxgl-ctrl-attrib { opacity: 0.1 !important; font-size: 4px !important; line-height: 1 !important; padding: 0 !important; }
 .mapboxgl-ctrl-attrib { min-height: 0 !important; }
@@ -302,6 +362,33 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--txt);font
       <div class="kv"><span class="kk">Route</span><span class="kval" id="dRte" style="font-size:9px;color:var(--cyan)">—</span></div>
       <div class="kv"><span class="kk">Point</span><span class="kval" id="dPt">—</span></div>
     </div>
+    <!-- Driver Info Section -->
+    <div id="drvSection">
+      <div class="drv-hdr">👤 Driver</div>
+      <div class="drv-top">
+        <div class="drv-avatar">🧑‍✈️</div>
+        <div>
+          <div class="drv-name" id="dDrvName">—</div>
+          <div class="drv-meta" id="dDrvMeta">—</div>
+        </div>
+      </div>
+      <div class="drv-row"><span class="drv-k">IC Number</span><span class="drv-v" id="dDrvIC">—</span></div>
+      <div class="drv-row"><span class="drv-k">License</span><span class="drv-v" id="dDrvLic">—</span></div>
+      <div class="drv-row"><span class="drv-k">Expiry</span><span class="drv-v" id="dDrvExp">—</span></div>
+      <div class="drv-row"><span class="drv-k">Health</span><span class="drv-v" id="dDrvHealth">—</span></div>
+      <div class="drv-row"><span class="drv-k">Contact</span><span class="drv-v" id="dDrvPhone">—</span></div>
+      <div class="drv-pills">
+        <span class="drv-pill" id="dDrvBlood">—</span>
+        <span class="drv-pill" id="dDrvExp2">—</span>
+      </div>
+      <!-- Traffic Offences -->
+      <div class="offence-hdr">
+        <span>⚠️ Traffic Offences</span>
+        <span id="dOffenceCount" style="font-size:9px;color:var(--muted);font-family:var(--M);font-weight:400;letter-spacing:0;text-transform:none;"></span>
+      </div>
+      <div id="dOffenceList"></div>
+    </div>
+
     <div id="ctrl">
       <button class="btn br2" id="btnLines" onclick="toggleLines()">≡ Lines</button>
     </div>
@@ -491,84 +578,129 @@ const RDEFS = [
     driver:{ name:'Ahmad Faiz bin Roslan', ic:'820415-08-5231', license:'D3841209',
       licClass:'PSV (Public Service Vehicle)', licExpiry:'2026-04-15',
       health:'Fit', lastMedical:'2024-11-10', bloodType:'B+',
-      phone:'+60 12-348 7821', age:42, exp:'18 years' }},
+      phone:'+60 12-348 7821', age:42, exp:'18 years',
+      offences:[
+        { type:'Melebihi Had Laju (>20km/h)', date:'2023-03-12', fine:300 },
+        { type:'Memotong Di Garisan Berkembar', date:'2022-08-05', fine:150 },
+        { type:'Tidak Berhenti Di Lampu Merah', date:'2021-11-20', fine:300 },
+      ]}},
 
   { id:'R02', bus:'BUS-IHP-002', color:'#00ff88', status:'active',
     label:'Ipoh Parade → Kinta City', A:[101.0849,4.5843], B:[101.1065,4.6221],
     driver:{ name:'Siti Aminah binti Hamdan', ic:'910722-05-6148', license:'D5029341',
       licClass:'PSV (Public Service Vehicle)', licExpiry:'2027-07-22',
       health:'Fit', lastMedical:'2024-09-05', bloodType:'O+',
-      phone:'+60 11-228 4490', age:33, exp:'9 years' }},
+      phone:'+60 11-228 4490', age:33, exp:'9 years',
+      offences:[] }},
 
   { id:'R03', bus:'BUS-IHP-003', color:'#a78bfa', status:'active',
     label:'KTM Ipoh → Tambun', A:[101.0870,4.5984], B:[101.1345,4.6218],
     driver:{ name:'Kumar Selvam a/l Ramasamy', ic:'850318-08-7712', license:'D4102876',
       licClass:'PSV (Public Service Vehicle)', licExpiry:'2025-03-18',
       health:'Fit', lastMedical:'2024-08-22', bloodType:'A+',
-      phone:'+60 12-771 3305', age:39, exp:'14 years' }},
+      phone:'+60 12-771 3305', age:39, exp:'14 years',
+      offences:[
+        { type:'Melebihi Had Laju (>10km/h)', date:'2024-01-09', fine:150 },
+        { type:'Berhenti Di Kawasan Larangan', date:'2022-05-17', fine:100 },
+      ]}},
 
   { id:'R04', bus:'BUS-IHP-004', color:'#ffb800', status:'active',
     label:'Old Town → Gunung Rapat', A:[101.0758,4.5924], B:[101.0963,4.5501],
     driver:{ name:'Lim Wei Keong', ic:'780901-08-4435', license:'D2918847',
       licClass:'PSV (Public Service Vehicle)', licExpiry:'2026-09-01',
       health:'Fit', lastMedical:'2025-01-14', bloodType:'O-',
-      phone:'+60 16-552 0918', age:46, exp:'21 years' }},
+      phone:'+60 16-552 0918', age:46, exp:'21 years',
+      offences:[
+        { type:'Melebihi Had Laju (>30km/h)', date:'2022-11-03', fine:400 },
+        { type:'Tidak Berhenti Di Lampu Merah', date:'2021-06-14', fine:300 },
+        { type:'Menggunakan Telefon Semasa Memandu', date:'2020-09-28', fine:1000 },
+      ]}},
 
   { id:'R05', bus:'BUS-IHP-005', color:'#ff4455', status:'active',
     label:'Bercham → Hospital RPB', A:[101.1080,4.6420], B:[101.0752,4.6002],
     driver:{ name:'Nor Haslinda binti Yusof', ic:'930210-05-2299', license:'D5512034',
       licClass:'PSV (Public Service Vehicle)', licExpiry:'2028-02-10',
       health:'Fit', lastMedical:'2024-12-03', bloodType:'AB+',
-      phone:'+60 11-334 6672', age:32, exp:'7 years' }},
+      phone:'+60 11-334 6672', age:32, exp:'7 years',
+      offences:[
+        { type:'Berhenti Di Kawasan Larangan', date:'2024-04-22', fine:100 },
+      ]}},
 
   { id:'R06', bus:'BUS-IHP-006', color:'#ff8c00', status:'active',
     label:'Pasir Pinji → Menglembu', A:[101.0622,4.5752], B:[101.0578,4.6025],
     driver:{ name:'Rajendran a/l Subramaniam', ic:'760504-08-6631', license:'D1874562',
       licClass:'PSV (Public Service Vehicle)', licExpiry:'2026-05-04',
       health:'Fit', lastMedical:'2024-10-18', bloodType:'B+',
-      phone:'+60 12-904 1187', age:48, exp:'23 years' }},
+      phone:'+60 12-904 1187', age:48, exp:'23 years',
+      offences:[
+        { type:'Memotong Di Garisan Berkembar', date:'2023-07-11', fine:150 },
+        { type:'Melebihi Had Laju (>20km/h)', date:'2021-02-28', fine:300 },
+        { type:'Berhenti Di Kawasan Larangan', date:'2019-12-05', fine:100 },
+      ]}},
 
   { id:'R07', bus:'BUS-IHP-007', color:'#e040fb', status:'active',
     label:'Greentown → Ipoh Garden East', A:[101.0871,4.5993], B:[101.1232,4.5898],
     driver:{ name:'Hamizah binti Mohd Zin', ic:'890628-05-3317', license:'D4780923',
       licClass:'PSV (Public Service Vehicle)', licExpiry:'2027-06-28',
       health:'Fit', lastMedical:'2024-07-30', bloodType:'A-',
-      phone:'+60 11-445 8823', age:35, exp:'11 years' }},
+      phone:'+60 11-445 8823', age:35, exp:'11 years',
+      offences:[
+        { type:'Lampu Kenderaan Tidak Berfungsi', date:'2023-09-30', fine:50 },
+        { type:'Melebihi Had Laju (>10km/h)', date:'2022-04-15', fine:150 },
+      ]}},
 
   { id:'R08', bus:'BUS-IHP-008', color:'#4fc3f7', status:'active',
     label:'Terminal Amanjaya → KTM', A:[101.1183,4.6401], B:[101.0862,4.5972],
     driver:{ name:'Mohd Hafizuddin bin Roslan', ic:'880112-05-5509', license:'D4392018',
       licClass:'PSV (Public Service Vehicle)', licExpiry:'2026-01-12',
       health:'Fit', lastMedical:'2025-01-08', bloodType:'O+',
-      phone:'+60 12-619 0044', age:37, exp:'12 years' }},
+      phone:'+60 12-619 0044', age:37, exp:'12 years',
+      offences:[
+        { type:'Tidak Berhenti Di Lampu Merah', date:'2023-05-19', fine:300 },
+        { type:'Menggunakan Telefon Semasa Memandu', date:'2022-10-07', fine:1000 },
+      ]}},
 
   { id:'R09', bus:'BUS-IHP-009', color:'#c6f135', status:'active',
     label:'Jelapang → Old Town', A:[101.0425,4.6152], B:[101.0758,4.5924],
     driver:{ name:'Sivakumar a/l Muniandy', ic:'830726-08-8804', license:'D3601147',
       licClass:'PSV (Public Service Vehicle)', licExpiry:'2025-07-26',
       health:'Fit', lastMedical:'2024-06-15', bloodType:'B-',
-      phone:'+60 16-782 5531', age:41, exp:'16 years' }},
+      phone:'+60 16-782 5531', age:41, exp:'16 years',
+      offences:[
+        { type:'Melebihi Had Laju (>20km/h)', date:'2024-02-14', fine:300 },
+        { type:'Memotong Di Garisan Berkembar', date:'2023-11-03', fine:150 },
+        { type:'Berhenti Di Kawasan Larangan', date:'2022-06-22', fine:100 },
+      ]}},
 
   { id:'R10', bus:'BUS-IHP-010', color:'#f48fb1', status:'active',
     label:'KTM Ipoh → Falim', A:[101.0870,4.5984], B:[101.0948,4.5525],
     driver:{ name:'Zulaikha binti Kamarudin', ic:'960315-05-4421', license:'D5901238',
       licClass:'PSV (Public Service Vehicle)', licExpiry:'2028-03-15',
       health:'Fit', lastMedical:'2024-11-28', bloodType:'A+',
-      phone:'+60 11-901 3348', age:29, exp:'4 years' }},
+      phone:'+60 11-901 3348', age:29, exp:'4 years',
+      offences:[] }},
 
   { id:'R11', bus:'BUS-IHP-011', color:'#80cbc4', status:'active',
     label:'Silibin → City Centre', A:[101.0495,4.6108], B:[101.0871,4.5993],
     driver:{ name:'Chong Boon Sing', ic:'800920-08-2213', license:'D2741089',
       licClass:'PSV (Public Service Vehicle)', licExpiry:'2026-09-20',
       health:'Fit', lastMedical:'2024-08-11', bloodType:'O+',
-      phone:'+60 12-388 6670', age:44, exp:'19 years' }},
+      phone:'+60 12-388 6670', age:44, exp:'19 years',
+      offences:[
+        { type:'Melebihi Had Laju (>10km/h)', date:'2023-08-08', fine:150 },
+        { type:'Berhenti Di Kawasan Larangan', date:'2021-03-11', fine:100 },
+      ]}},
 
   { id:'R12', bus:'BUS-IHP-012', color:'#aed581', status:'active',
     label:'Chemor → Ipoh Parade', A:[101.1188,4.7092], B:[101.0849,4.5843],
     driver:{ name:'Norfazilah binti Ahmad', ic:'910508-05-7726', license:'D5118834',
       licClass:'PSV (Public Service Vehicle)', licExpiry:'2027-05-08',
       health:'Fit', lastMedical:'2024-10-02', bloodType:'AB-',
-      phone:'+60 11-774 2290', age:33, exp:'8 years' }},
+      phone:'+60 11-774 2290', age:33, exp:'8 years',
+      offences:[
+        { type:'Tidak Beri Laluan Kepada Pejalan Kaki', date:'2024-06-01', fine:150 },
+        { type:'Melebihi Had Laju (>10km/h)', date:'2023-01-25', fine:150 },
+      ]}},
 
   // ── 2 IDLE buses ──────────────────────────────────────────────────────────
   { id:'R13', bus:'BUS-IHP-013', color:'#ffe082', status:'idle',
@@ -576,14 +708,20 @@ const RDEFS = [
     driver:{ name:'Jayabalan a/l Krishnan', ic:'870214-08-3341', license:'D4201756',
       licClass:'PSV (Public Service Vehicle)', licExpiry:'2026-02-14',
       health:'Fit', lastMedical:'2024-09-19', bloodType:'B+',
-      phone:'+60 12-443 9917', age:38, exp:'13 years' }},
+      phone:'+60 12-443 9917', age:38, exp:'13 years',
+      offences:[
+        { type:'Melebihi Had Laju (>30km/h)', date:'2023-10-16', fine:400 },
+        { type:'Tidak Berhenti Di Lampu Merah', date:'2022-07-04', fine:300 },
+        { type:'Menggunakan Telefon Semasa Memandu', date:'2021-04-19', fine:1000 },
+      ]}},
 
   { id:'R14', bus:'BUS-IHP-014', color:'#ff7043', status:'idle',
     label:'Meru Raya → Greentown', A:[101.0950,4.6572], B:[101.0871,4.5993],
     driver:{ name:'Suhana binti Ismail', ic:'940830-05-6688', license:'D5678901',
       licClass:'PSV (Public Service Vehicle)', licExpiry:'2027-08-30',
       health:'Fit', lastMedical:'2025-01-20', bloodType:'O+',
-      phone:'+60 11-556 8843', age:30, exp:'5 years' }},
+      phone:'+60 11-556 8843', age:30, exp:'5 years',
+      offences:[] }},
 
   // ── 1 OFFLINE bus ─────────────────────────────────────────────────────────
   { id:'R15', bus:'BUS-IHP-015', color:'#607d8b', status:'offline',
@@ -591,7 +729,12 @@ const RDEFS = [
     driver:{ name:'Kamaruddin bin Osman', ic:'751103-08-9902', license:'D1563428',
       licClass:'PSV (Public Service Vehicle)', licExpiry:'2025-11-03',
       health:'Unfit — Medical Leave', lastMedical:'2025-02-18', bloodType:'A+',
-      phone:'+60 12-211 7765', age:49, exp:'24 years' }},
+      phone:'+60 12-211 7765', age:49, exp:'24 years',
+      offences:[
+        { type:'Melebihi Had Laju (>20km/h)', date:'2024-08-22', fine:300 },
+        { type:'Memotong Di Garisan Berkembar', date:'2023-03-30', fine:150 },
+        { type:'Berhenti Di Kawasan Larangan', date:'2021-09-14', fine:100 },
+      ]}},
 ];
 
 // ── STATE ─────────────────────────────────────────────────────────────────────
@@ -1123,6 +1266,62 @@ function updDet(id, lng, lat) {
   // driver display removed
   document.getElementById('dRte').textContent = s.d.label;
   document.getElementById('dPt').textContent  = Math.floor(t)+' / '+s.pts.length;
+
+  // ── Driver info in sidebar ─────────────────────────────────────
+  const dr = s.d.driver;
+  const drvSec = document.getElementById('drvSection');
+  if (dr) {
+    drvSec.style.display = 'block';
+    document.getElementById('dDrvName').textContent  = dr.name;
+    document.getElementById('dDrvMeta').textContent  = dr.exp + ' · Age ' + dr.age;
+    document.getElementById('dDrvIC').textContent    = dr.ic;
+    document.getElementById('dDrvLic').textContent   = dr.license + ' · ' + dr.licClass.replace('Public Service Vehicle','PSV');
+    document.getElementById('dDrvPhone').textContent = dr.phone;
+
+    // License expiry
+    const expEl   = document.getElementById('dDrvExp');
+    const expDate = new Date(dr.licExpiry);
+    const today   = new Date();
+    const daysLeft = Math.ceil((expDate - today)/(1000*60*60*24));
+    expEl.textContent = dr.licExpiry + (daysLeft<0?' ⚠ EXPIRED':daysLeft<90?' ('+daysLeft+'d)':'');
+    expEl.className   = 'drv-v ' + (daysLeft<0?'bad':daysLeft<90?'warn':'ok');
+
+    // Health
+    const hEl = document.getElementById('dDrvHealth');
+    hEl.textContent = dr.health + ' · ' + dr.lastMedical;
+    hEl.className   = 'drv-v ' + (dr.health==='Fit'?'ok':'bad');
+
+    // Pills
+    document.getElementById('dDrvBlood').textContent = '🩸 ' + dr.bloodType;
+    document.getElementById('dDrvExp2').textContent  = '🏅 ' + dr.exp;
+
+    // ── Offences ────────────────────────────────────────────────
+    const offList = document.getElementById('dOffenceList');
+    const offences = dr.offences || [];
+    const total = offences.reduce((s,o) => s+o.fine, 0);
+    document.getElementById('dOffenceCount').textContent = offences.length
+      ? offences.length + ' record' + (offences.length>1?'s':'')
+      : 'Clean';
+
+    if (offences.length === 0) {
+      offList.innerHTML = `<div class="offence-clean">✓ No recorded offences</div>`;
+    } else {
+      offList.innerHTML = offences.map(o => `
+        <div class="offence-item">
+          <div class="offence-type">${o.type}</div>
+          <div class="offence-meta">
+            <span class="offence-date">📅 ${o.date}</span>
+            <span class="offence-fine">RM ${o.fine.toLocaleString()}</span>
+          </div>
+        </div>`).join('') +
+        `<div class="offence-total">
+          <span class="offence-total-lbl">Total Fines</span>
+          <span class="offence-total-val">RM ${total.toLocaleString()}</span>
+        </div>`;
+    }
+  } else {
+    drvSec.style.display = 'none';
+  }
 }
 
 function updHUD(act, avg) {
